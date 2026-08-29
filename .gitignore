@@ -1,0 +1,21 @@
+# Source docs + design notes — kept local, never tracked
+raw-docs/
+docs/
+
+# Generated data snapshot (regenerated from the game submodule by the extractor)
+src/data/generated/
+
+# Icons copied out of the game submodule at extract time (regenerated)
+public/game-assets/
+
+# Build output
+dist/
+
+# Node / tooling
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+*.local
+.vite/

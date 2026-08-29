@@ -1,0 +1,4 @@
+[submodule "game"]
+	path = game
+	url = https://github.com/actualdoctornerd-ai/Zombie-Farm-2-Reforged.git
+	shallow = true

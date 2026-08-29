@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Light theme — warm "paper + soil" ground with a grassy green primary. */
+  :root {
+    --bg: 244 241 232;
+    --surface: 255 255 255;
+    --surface-2: 237 232 221;
+    --border: 221 214 198;
+    --text: 35 31 25;
+    --text-muted: 108 100 84;
+    --primary: 82 130 52;
+    --primary-strong: 58 96 35;
+    --accent-brain: 194 74 138;
+    --accent-gold: 197 143 34;
+    --danger: 176 54 43;
+
+    /* Zombie class colors — stable across themes. */
+    --class-green: 78 154 61;
+    --class-blue: 59 124 196;
+    --class-red: 192 57 43;
+    --class-silver: 130 140 158;
+    --class-yellow: 214 158 46;
+    --class-special: 155 89 182;
+  }
+
+  [data-theme="dark"] {
+    --bg: 22 25 20;
+    --surface: 31 35 28;
+    --surface-2: 42 47 38;
+    --border: 58 64 50;
+    --text: 231 229 220;
+    --text-muted: 156 154 143;
+    --primary: 124 176 92;
+    --primary-strong: 150 197 118;
+    --accent-brain: 224 122 176;
+    --accent-gold: 224 172 74;
+    --danger: 224 109 98;
+
+    --class-green: 108 184 90;
+    --class-blue: 92 156 224;
+    --class-red: 224 100 88;
+    --class-silver: 168 178 196;
+    --class-yellow: 228 178 74;
+    --class-special: 190 130 214;
+  }
+
+  /* System-preference default when the user hasn't chosen explicitly. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: 22 25 20;
+      --surface: 31 35 28;
+      --surface-2: 42 47 38;
+      --border: 58 64 50;
+      --text: 231 229 220;
+      --text-muted: 156 154 143;
+      --primary: 124 176 92;
+      --primary-strong: 150 197 118;
+      --accent-brain: 224 122 176;
+      --accent-gold: 224 172 74;
+      --danger: 224 109 98;
+
+      --class-green: 108 184 90;
+      --class-blue: 92 156 224;
+      --class-red: 224 100 88;
+      --class-silver: 168 178 196;
+      --class-yellow: 228 178 74;
+      --class-special: 190 130 214;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight text-text;
+    text-wrap: balance;
+  }
+
+  a {
+    @apply text-primary-strong;
+  }
+
+  /* Numeric columns line up. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: rgb(var(--primary) / 0.25);
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-lg border border-border bg-surface;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-border bg-surface-2 px-2 py-0.5 text-xs font-medium text-muted;
+  }
+
+  .btn {
+    @apply inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-sm font-medium text-text transition-colors hover:bg-surface-2;
+  }
+
+  .btn-active {
+    @apply border-primary bg-primary/10 text-primary-strong;
+  }
+
+  /* Data table baseline — dense but scannable. */
+  .data-table {
+    @apply w-full border-collapse text-sm;
+  }
+  .data-table th {
+    @apply sticky top-0 z-10 whitespace-nowrap border-b border-border bg-surface-2 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-muted;
+  }
+  .data-table td {
+    @apply border-b border-border/60 px-3 py-2 align-middle;
+  }
+  .data-table tbody tr:hover {
+    background: rgb(var(--primary) / 0.06);
+  }
+
+  .prose-tight p {
+    @apply my-2 leading-relaxed text-text;
+  }
+  .prose-tight ul {
+    @apply my-2 list-disc space-y-1 pl-5;
+  }
+}
