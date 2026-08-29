@@ -56,6 +56,17 @@ export function EpicBossesIndex() {
         </p>
       </PageHeader>
       <DataTable rows={epicBosses} columns={columns} rowKey={(b) => b.id} initialSort={{ key: "unlock", dir: "asc" }} />
+
+      <Section title="Boss Tokens">
+        <Note>
+          A run is a purchase with a 14-day clock — there's no season calendar. Each ladder attempt costs one Boss Token, or{" "}
+          {epicBosses[0]?.fightBrainCost ?? 1} brain if you have none. Tokens drop only from <strong>crop</strong> harvests while a run is
+          active (never from zombies or trees), and the count resets to zero the moment the run completes or expires — they don't bank
+          across events. Each boss has a favorite crop that raises its token rate. A rung is an HP pool chipped down across attempts
+          inside a 2-hour encounter window; miss the window and the rung's HP fully restores. Per-plot-day token rates are a throughput
+          calculation, deliberately out of scope here.
+        </Note>
+      </Section>
     </div>
   );
 }

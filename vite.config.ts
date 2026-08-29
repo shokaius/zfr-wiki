@@ -11,5 +11,13 @@ export default defineConfig({
     outDir: "dist",
     // Icons are many small files; don't inline them as data URIs.
     assetsInlineLimit: 0,
+    chunkSizeWarningLimit: 900,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom", "react-router-dom"],
+        },
+      },
+    },
   },
 });

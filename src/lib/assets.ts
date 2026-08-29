@@ -1,7 +1,7 @@
 // Icons are copied (flattened) into public/game-assets/all/<basename> by the
 // extractor. BASE_URL is "/" in dev and "./" for the GitHub Pages build.
 
-const BASE = import.meta.env.BASE_URL;
+const BASE = import.meta.env?.BASE_URL ?? "./";
 const DIR = `${BASE}game-assets/all/`;
 
 function leaf(file: string): string {

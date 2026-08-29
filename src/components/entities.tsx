@@ -34,7 +34,7 @@ export function CropChip({ k }: { k: string }) {
   const c = cropByKey[k];
   if (!c) return <span className="chip">{k}</span>;
   return (
-    <Chip to={`/crops/${cropSlug(c)}`} icon={<GameIcon file={c.icon} alt="" size="xs" fallback="none" />}>
+    <Chip to={`/crops/${cropSlug(c)}`} icon={<GameIcon file={c.icon} fallbackFile={c.stage2} alt="" size="xs" fallback="none" />}>
       {c.name}
     </Chip>
   );

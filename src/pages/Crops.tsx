@@ -21,7 +21,7 @@ export function CropsIndex() {
       value: (c) => c.name,
       render: (c) => (
         <Link to={`/crops/${cropSlug(c)}`} className="inline-flex items-center gap-2 font-medium !text-text hover:!text-primary-strong">
-          <GameIcon file={c.icon} alt="" size="sm" fallback="none" />
+          <GameIcon file={c.icon} fallbackFile={c.stage2} alt="" size="sm" fallback="none" />
           {c.name}
           {c.seasonal && <SeasonalBadge theme="seasonal" />}
         </Link>
@@ -103,7 +103,7 @@ export function CropDetail() {
   return (
     <div>
       <Breadcrumbs trail={[{ label: "Crops", to: "/crops" }, { label: crop.name }]} />
-      <PageHeader title={crop.name} icon={<GameIcon file={crop.icon} alt={crop.name} size="xl" fallback="none" />} kicker="Crop" />
+      <PageHeader title={crop.name} icon={<GameIcon file={crop.icon} fallbackFile={crop.stage2} alt={crop.name} size="xl" fallback="none" />} kicker="Crop" />
 
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
         <Panel>
