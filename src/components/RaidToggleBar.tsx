@@ -21,9 +21,17 @@ export function RaidToggleBar({ s, patch }: { s: RaidSettings; patch: (p: Partia
         </select>
       </label>
 
-      <label className="flex cursor-pointer items-center gap-1.5">
-        <input type="checkbox" checked={s.useVoucher} onChange={(e) => patch({ useVoucher: e.target.checked })} />
-        <span>Use Voucher</span>
+      <label
+        className={`flex items-center gap-1.5 ${s.elite ? "opacity-50" : "cursor-pointer"}`}
+        title={s.elite ? "The Brain Ticket already skips the cooldown, so no voucher is needed." : undefined}
+      >
+        <input
+          type="checkbox"
+          checked={s.useVoucher && !s.elite}
+          disabled={s.elite}
+          onChange={(e) => patch({ useVoucher: e.target.checked })}
+        />
+        <span>Use Voucher{s.elite && <span className="ml-1 text-xs text-muted">(covered by ticket)</span>}</span>
       </label>
 
       <label className="flex cursor-pointer items-center gap-1.5">

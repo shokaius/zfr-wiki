@@ -57,7 +57,9 @@ export interface ComputedRaidEv {
 export function computeRaidEv(raid: Raid, s: RaidSettings): ComputedRaidEv {
   const cell = raid.ev.byDice[Math.min(5, Math.max(0, s.dice))] ?? raid.ev.byDice[0];
   const winGold = Math.round(raid.winGoldFull * s.survival);
-  const voucherCost = s.useVoucher ? raid.voucherCost : 0;
+  // A Brain Ticket skips the same cooldown a Voucher does (eliteInvasion.ts), so an
+  // elite run never pays for a voucher on top.
+  const voucherCost = s.useVoucher && !s.elite ? raid.voucherCost : 0;
   const eliteCost = s.elite ? raid.eliteCost : 0;
   const decorSellEV = s.sellDecor ? cell.decorSellEV : 0;
   const netGold = winGold - voucherCost - eliteCost + cell.alwaysGoldEV + decorSellEV;

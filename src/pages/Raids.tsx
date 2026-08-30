@@ -87,8 +87,8 @@ export function RaidsIndex() {
 
       <Note tone="muted">
         Net gold counts win gold (scaled by survival), the bonus-gold and voucher-refund loot picks, and - when "Sell decorations" is
-        on - the expected decoration sell value. Elite subtracts the 10,000-gold Brain Ticket and quadruples brain & rare luck; enemy
-        difficulty (much harder) isn't modeled here.
+        on - the expected decoration sell value. Elite subtracts the 10,000-gold Brain Ticket, which itself skips the cooldown (so no
+        voucher is charged on top), and quadruples brain & rare luck; enemy difficulty (much harder) isn't modeled here.
       </Note>
     </div>
   );
