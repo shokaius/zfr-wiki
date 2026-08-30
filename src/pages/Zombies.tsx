@@ -36,8 +36,8 @@ export function ZombiesIndex() {
       sortable: true,
       value: (z) => z.name,
       render: (z) => (
-        <Link to={`/zombies/${zombieSlug(z)}`} className="inline-flex items-center gap-2 font-medium !text-text hover:!text-primary-strong">
-          <ZombieIcon zombie={z} size="sm" />
+        <Link to={`/zombies/${zombieSlug(z)}`} className="inline-flex items-center gap-3 font-medium !text-text hover:!text-primary-strong">
+          <ZombieIcon zombie={z} size="xl" />
           {z.name}
         </Link>
       ),
