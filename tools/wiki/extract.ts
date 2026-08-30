@@ -236,6 +236,10 @@ const zombiesByKey: Record<string, any> = {};
 
 const zombies = zombiesRaw.map((z) => {
   ref(z.specialSprite);
+  // Pre-rendered portrait keyed by actor key — covers all 95 zombies, including
+  // the part-assembled specials (Teddy, Diver, tier-5 promotions).
+  const portraitFile = `${z.key}.png`;
+  ref(portraitFile);
   const group: string = GROUPS.includes(z.group) ? z.group : "Regular";
   const isHeadless = group === HEADLESS;
   const dps = DPS(z.str, z.dex);
@@ -311,6 +315,7 @@ const zombies = zombiesRaw.map((z) => {
     rewardOnly: !!z.rewardOnly,
     marketHidden: !!z.marketHidden,
     specialSprite: z.specialSprite ?? null,
+    portrait: portraitFile,
     dps: round(dps),
     hp,
     abilityTiers,

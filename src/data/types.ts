@@ -85,6 +85,7 @@ export interface Zombie {
   rewardOnly: boolean;
   marketHidden: boolean;
   specialSprite: string | null;
+  portrait: string;
   dps: number;
   hp: number;
   abilityTiers: number;
