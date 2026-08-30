@@ -5,6 +5,7 @@ import { Gold, Brains } from "../components/ui/Currency";
 import { Badge } from "../components/ui/Badge";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
 import { ZombieChip } from "../components/entities";
+import { PageIcon } from "../components/PageIcon";
 import { boosts, boostSlug, boostSlugs, zombieByKey } from "../data";
 import { levelLabel } from "../lib/format";
 import type { Boost } from "../data/types";
@@ -45,7 +46,7 @@ export function BoostsPage() {
 
   return (
     <div>
-      <PageHeader title="Boosts" kicker={`${boosts.length} boosts`}>
+      <PageHeader title="Boosts" icon={<PageIcon to="/boosts" />} kicker={`${boosts.length} boosts`}>
         <p>Consumables bought with brains or gold and used on the farm or in battle. Insta-Grow is the only one that drops from raids in a bundle of ten.</p>
       </PageHeader>
       <DataTable rows={boosts} columns={columns} rowKey={(b) => b.key} initialSort={{ key: "level", dir: "asc" }} />

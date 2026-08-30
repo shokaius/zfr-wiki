@@ -5,6 +5,7 @@ import { Gold, Brains, Xp } from "../components/ui/Currency";
 import { Badge, SeasonalBadge, UnavailableBadge } from "../components/ui/Badge";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
 import { placeables, placeableSlug, placeableSlugs, economy } from "../data";
+import { PageIcon } from "../components/PageIcon";
 import { num, duration, titleCase, levelLabel } from "../lib/format";
 import type { Placeable } from "../data/types";
 
@@ -46,7 +47,7 @@ export function PlaceablesIndex() {
 
   return (
     <div>
-      <PageHeader title="Placeables" kicker={`${placeables.length} objects`}>
+      <PageHeader title="Placeables" icon={<PageIcon to="/placeables" />} kicker={`${placeables.length} objects`}>
         <p>
           Decor, functional buildings (monoliths, graves, the pot, storage), and fruit trees. Seasonal items are gated behind the{" "}
           <span className="font-mono">ACTIVE_THEMES</span> list (currently only <em>evergreen</em>); unavailable items sort to the bottom.

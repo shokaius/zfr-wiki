@@ -4,6 +4,7 @@ import { Badge } from "../components/ui/Badge";
 import { PageHeader, Section, Panel, Note } from "../components/ui/layout";
 import { SourceCite } from "../components/ui/SourceCite";
 import { abilities, abilitiesFile } from "../data";
+import { PageIcon } from "../components/PageIcon";
 import { titleCase } from "../lib/format";
 import type { Ability } from "../data/types";
 
@@ -45,7 +46,7 @@ export function AbilitiesPage() {
 
   return (
     <div>
-      <PageHeader title="Abilities" kicker={`${abilities.length} abilities`}>
+      <PageHeader title="Abilities" icon={<PageIcon to="/abilities" />} kicker={`${abilities.length} abilities`}>
         <p>
           Combat abilities are granted by a zombie's group across four tiers. A tier is usable when the zombie's class carries it and its
           boss has been beaten ({Object.values(abilitiesFile.tierBoss).join(", ")}).
@@ -105,8 +106,6 @@ export function AbilitiesPage() {
           </Panel>
         </Section>
       )}
-
-      <Note tone="muted">Effect values are read from the ability pool and combat tables. Damage factors and cooldowns are exact; the fight resolution itself (a battle simulator) is deferred.</Note>
     </div>
   );
 }

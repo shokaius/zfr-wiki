@@ -4,6 +4,7 @@ import { Badge } from "../components/ui/Badge";
 import { PageHeader, Section, Note } from "../components/ui/layout";
 import { questsFile } from "../data";
 import { levelLabel } from "../lib/format";
+import { PageIcon } from "../components/PageIcon";
 import type { Quest } from "../data/types";
 
 function questColumns(): Column<Quest>[] {
@@ -54,7 +55,7 @@ function questColumns(): Column<Quest>[] {
 export function QuestsPage() {
   return (
     <div>
-      <PageHeader title="Quests" kicker={`${questsFile.core.length + questsFile.reforged.length} quests`}>
+      <PageHeader title="Quests" icon={<PageIcon to="/quests" />} kicker={`${questsFile.core.length + questsFile.reforged.length} quests`}>
         <p>
           Quests give XP and occasional gold, item, or zombie rewards. Brain rewards appear only on epic-event quests. Two quest
           catalogs ship in the data; both are shown below.

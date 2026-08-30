@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { GameIcon } from "../components/ui/GameIcon";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
 import { enemies, enemySlug, enemySlugs } from "../data";
+import { PageIcon } from "../components/PageIcon";
 import { num } from "../lib/format";
 import type { Enemy } from "../data/types";
 
@@ -39,7 +40,7 @@ export function EnemiesIndex() {
 
   return (
     <div>
-      <PageHeader title="Enemies" kicker={`${enemies.length} units`}>
+      <PageHeader title="Enemies" icon={<PageIcon to="/enemies" />} kicker={`${enemies.length} units`}>
         <p>Every unit that fights you, grouped by the raid it first appears in. Enemies attack once per second; HP is con × 100 and melee DPS is str × 10.</p>
       </PageHeader>
 

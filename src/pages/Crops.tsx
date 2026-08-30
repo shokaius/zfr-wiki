@@ -6,6 +6,7 @@ import { SeasonalBadge, Badge } from "../components/ui/Badge";
 import { Formula, Fx } from "../components/ui/Formula";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
 import { MutationChip } from "../components/entities";
+import { PageIcon } from "../components/PageIcon";
 import { crops, cropSlug, cropSlugs, mutations } from "../data";
 import { num, duration, titleCase, levelLabel } from "../lib/format";
 import type { Crop } from "../data/types";
@@ -61,7 +62,7 @@ export function CropsIndex() {
 
   return (
     <div>
-      <PageHeader title="Crops" kicker={`${crops.length} crops`}>
+      <PageHeader title="Crops" icon={<PageIcon to="/crops" />} kicker={`${crops.length} crops`}>
         <p>
           Crops are planted, grown, and harvested for gold and XP. A crop planted next to a zombie plot at harvest can grant its{" "}
           <Link to="/mutations">mutation</Link>. Net gold per cycle is sell price minus seed cost minus the 10-gold re-plow.

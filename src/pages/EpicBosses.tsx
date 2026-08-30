@@ -4,6 +4,7 @@ import { GameIcon } from "../components/ui/GameIcon";
 import { Brains } from "../components/ui/Currency";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
 import { ZombieChip, CropChip } from "../components/entities";
+import { PageIcon } from "../components/PageIcon";
 import { epicBosses, epicBossSlug, epicBossSlugs } from "../data";
 import { num, duration } from "../lib/format";
 import type { EpicBoss } from "../data/types";
@@ -49,7 +50,7 @@ export function EpicBossesIndex() {
 
   return (
     <div>
-      <PageHeader title="Epic Bosses" kicker={`${epicBosses.length} bosses`}>
+      <PageHeader title="Epic Bosses" icon={<PageIcon to="/epic-bosses" />} kicker={`${epicBosses.length} bosses`}>
         <p>
           Time-limited, level-gated events bought with brains. Each is a {epicBosses[0]?.maxLevel ?? 10}-rung ladder that rewards named
           Yellow-class quest zombies. Cost, unlock level, HP curve, and prize zombies are listed per boss.

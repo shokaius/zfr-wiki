@@ -8,6 +8,7 @@ import { Formula, Fx } from "../components/ui/Formula";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
 import { ZombieChip, EnemyChip, PlaceableChip, BoostChip } from "../components/entities";
 import { RaidToggleBar } from "../components/RaidToggleBar";
+import { PageIcon } from "../components/PageIcon";
 import { useRaidSettings, computeRaidEv, type ComputedRaidEv } from "../lib/raidEv";
 import { raids, raidSlug, raidBySlug } from "../data";
 import { num, duration, pct, levelLabel } from "../lib/format";
@@ -73,7 +74,7 @@ export function RaidsIndex() {
 
   return (
     <div>
-      <PageHeader title="Raids" kicker={`${raids.length} raids`}>
+      <PageHeader title="Raids" icon={<PageIcon to="/raids" />} kicker={`${raids.length} raids`}>
         <p>
           Invasions reward gold, brains, boosts, and — on four of them — a rare zombie. XP is paid only on the first clear. The gold,
           brains, and rare-zombie columns are expected values computed from the assumptions in the toggle bar below.
@@ -209,8 +210,8 @@ export function RaidDetail() {
               </div>
             ))}
             <p className="text-xs text-muted">
-              Enemy HP is con × 100 and melee DPS is str × 10 (1s enemy interval). Boss throws/specials add damage beyond melee and
-              aren't in the aggregate. The live battle order (a trickle sim) is deferred.
+              Enemy HP is con × 100 and melee DPS is str × 10 (1s enemy interval). Boss throws and specials add damage beyond melee and
+              aren't in the aggregate.
             </p>
           </Section>
         </div>

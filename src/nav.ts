@@ -9,6 +9,12 @@ export interface NavGroup {
   items: NavItem[];
 }
 
+/** The NavItem whose route matches (used to reuse its icon on page headers). */
+export function navItemFor(to: string): NavItem | undefined {
+  for (const g of NAV) for (const i of g.items) if (i.to === to) return i;
+  return undefined;
+}
+
 export const NAV: NavGroup[] = [
   {
     title: "Entities",

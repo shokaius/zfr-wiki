@@ -2,6 +2,7 @@ import { PageHeader, Section, Panel, Note, KeyRow } from "../components/ui/layou
 import { Badge } from "../components/ui/Badge";
 import { SourceCite } from "../components/ui/SourceCite";
 import { ZombieChip } from "../components/entities";
+import { PageIcon } from "../components/PageIcon";
 import { combat, zombieByKey } from "../data";
 import { duration } from "../lib/format";
 
@@ -14,7 +15,7 @@ export function CombiningPage() {
 
   return (
     <div>
-      <PageHeader title="Combining · Zombie Pot" kicker="deterministic mutation stacking">
+      <PageHeader title="Combining · Zombie Pot" icon={<PageIcon to="/combining" />} kicker="deterministic mutation stacking">
         <p>
           The Zombie Pot merges two zombies with no RNG on the mutation mask. Slot 1 decides the species; both parents' mutations union
           per slot, and a same-slot conflict takes the higher catalog bit (always the higher-tier mutation).
@@ -100,7 +101,6 @@ export function CombiningPage() {
             Special + Special can't combine, and a Special is rejected in slot 2 outright — so always put a rare/Special parent in slot 1.
             <div className="mt-1"><SourceCite file="src/zombie/combineSpecies.ts" label="combineSpecies.ts" /> · <SourceCite file="src/zombie/ZombiePot.ts" label="ZombiePot.ts" /></div>
           </Note>
-          <Note tone="muted">The interactive combine calculator (pick two parents → exact child) is deferred from this reference build.</Note>
         </div>
       </div>
     </div>

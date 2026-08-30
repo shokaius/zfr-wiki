@@ -2,6 +2,7 @@ import { PageHeader, Section, Note, Panel } from "../components/ui/layout";
 import { Badge } from "../components/ui/Badge";
 import { GameIcon } from "../components/ui/GameIcon";
 import { CropChip } from "../components/entities";
+import { PageIcon } from "../components/PageIcon";
 import { SourceCite } from "../components/ui/SourceCite";
 import { mutationsFile, mutations } from "../data";
 import { titleCase, pct } from "../lib/format";
@@ -16,7 +17,7 @@ export function MutationsPage() {
 
   return (
     <div>
-      <PageHeader title="Mutations" kicker={`${mutations.length} mutations · ${mutationsFile.slots.length} slots`}>
+      <PageHeader title="Mutations" icon={<PageIcon to="/mutations" />} kicker={`${mutations.length} mutations · ${mutationsFile.slots.length} slots`}>
         <p>
           A zombie has five anatomical slots, each holding at most one mutation. Mutations roll at harvest against whatever crop is
           planted in adjacent plots. Same-slot mutations conflict — the higher catalog bit wins in the Zombie Pot, or the lower random
@@ -102,11 +103,6 @@ export function MutationsPage() {
           </div>
         </div>
       </Section>
-
-      <Note tone="muted">
-        The interactive mutation calculator (assign crops to 8 neighbour slots → per-mutation probability) is intentionally deferred
-        from this reference build. <Badge>deferred</Badge>
-      </Note>
     </div>
   );
 }

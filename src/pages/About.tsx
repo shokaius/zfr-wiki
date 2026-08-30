@@ -1,4 +1,5 @@
 import { PageHeader, Section, Panel, Note, KeyRow } from "../components/ui/layout";
+import { PageIcon } from "../components/PageIcon";
 import { SourceCite } from "../components/ui/SourceCite";
 import { GAME } from "../lib/gameMeta";
 
@@ -33,17 +34,10 @@ const REGISTRY: { domain: string; file: string }[] = [
   { domain: "Epic boss tokens & rewards", file: "src/epicBoss/*.ts" },
 ];
 
-const DEFERRED = [
-  "Mutation calculator (adjacency layout → per-mutation probability)",
-  "Combine calculator (two parents → exact child)",
-  "Battle simulator (live BattleSim outcome)",
-  "Per-hour and per-tap throughput (XP/hour, gold/hour, tokens/plot-day)",
-];
-
 export function AboutPage() {
   return (
     <div>
-      <PageHeader title="Sources & about" kicker="how this wiki is built">
+      <PageHeader title="Sources & about" icon={<PageIcon to="/about" />} kicker="how this wiki is built">
         <p>
           Every page is generated from the Zombie Farm 2 Reforged repo — JSON assets read directly, TypeScript constants imported (never
           re-parsed) and run through the game's own functions. So the wiki can't disagree with the game, and a balance patch shows up
@@ -61,14 +55,6 @@ export function AboutPage() {
             {Object.entries(GAME.counts).map(([k, v]) => (
               <KeyRow key={k} label={k}>{v}</KeyRow>
             ))}
-          </Panel>
-          <Panel>
-            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Deferred features</h2>
-            <ul className="prose-tight list-disc space-y-1 pl-4 text-sm text-muted">
-              {DEFERRED.map((d) => (
-                <li key={d}>{d}</li>
-              ))}
-            </ul>
           </Panel>
         </div>
 

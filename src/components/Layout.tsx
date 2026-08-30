@@ -55,9 +55,8 @@ export function Layout({ children }: { children: ReactNode }) {
             </svg>
           </button>
           <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold !text-text">
-            <span className="grid h-7 w-7 place-items-center rounded bg-primary text-sm text-white">Z</span>
             <span>
-              ZF2R <span className="text-muted">Wiki</span>
+              ZFR <span className="text-muted">Wiki</span>
             </span>
           </Link>
           <div className="ml-auto flex items-center gap-2">
@@ -72,7 +71,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 <path d="m21 21-4.3-4.3" />
               </svg>
               <span className="hidden text-xs sm:inline">Search</span>
-              <kbd className="hidden rounded border border-border px-1 text-[10px] sm:inline">⇧P</kbd>
+              <kbd className="hidden rounded border border-border px-1.5 text-[10px] sm:inline">Shift + P</kbd>
             </button>
             <a
               href={GAME.repoUrl}

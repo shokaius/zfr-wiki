@@ -72,7 +72,7 @@ export function Home() {
               <path d="m21 21-4.3-4.3" />
             </svg>
             Search crops, zombies, raids, mutations…
-            <kbd className="ml-auto rounded border border-border px-1.5 py-0.5 text-[10px]">⇧P</kbd>
+            <kbd className="ml-auto rounded border border-border px-1.5 py-0.5 text-[10px]">Shift + P</kbd>
           </button>
         </div>
       </section>

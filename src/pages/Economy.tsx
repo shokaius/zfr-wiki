@@ -1,4 +1,5 @@
 import { PageHeader, Section } from "../components/ui/layout";
+import { PageIcon } from "../components/PageIcon";
 import { SourceCite } from "../components/ui/SourceCite";
 import { economy } from "../data";
 import { num } from "../lib/format";
@@ -7,7 +8,7 @@ export function LevelingPage() {
   const e = economy;
   return (
     <div>
-      <PageHeader title="Leveling" kicker={`max level ${e.maxLevel}`}>
+      <PageHeader title="Leveling" icon={<PageIcon to="/leveling" />} kicker={`max level ${e.maxLevel}`}>
         <p>XP required to reach each level. XP comes from harvesting crops, first-clearing raids, quests, and buying placeables. Raids pay XP only on the first clear.</p>
       </PageHeader>
 

@@ -4,6 +4,7 @@ import { GameIcon } from "../components/ui/GameIcon";
 import { Gold, Brains } from "../components/ui/Currency";
 import { Badge } from "../components/ui/Badge";
 import { PageHeader, Section, Note } from "../components/ui/layout";
+import { PageIcon } from "../components/PageIcon";
 import { levelLabel } from "../lib/format";
 import { crops, cropSlug, zombies, zombieSlug, raids, raidSlug, placeables, placeableSlug, epicBosses, epicBossSlug, upgrades } from "../data";
 
@@ -59,7 +60,7 @@ export function ProgressionPage() {
 
   return (
     <div>
-      <PageHeader title="Progression" kicker="what opens at each level">
+      <PageHeader title="Progression" icon={<PageIcon to="/progression" />} kicker="what opens at each level">
         <p>Everything gated by level, in one sortable list. Sort by level or filter by type to see what unlocks when.</p>
       </PageHeader>
 

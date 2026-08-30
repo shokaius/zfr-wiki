@@ -134,7 +134,7 @@ export function CombatPage() {
           Zombies mill on the left; one at a time the front zombie charges a focus bar, is released, advances, and fights the first
           living enemy. The boss perches top-right lobbing ballistics until minions clear, preferring Garden zombies as throw targets.
           Focus-bar distractions stall the release cadence (Concentration bypasses them). Because it's deterministic, a zero-casualty
-          clear repeats exactly. The interactive simulator is deferred from this reference.
+          clear repeats exactly.
         </Note>
       </Section>
     </div>

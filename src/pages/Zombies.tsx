@@ -6,6 +6,7 @@ import { ClassBadge, Badge } from "../components/ui/Badge";
 import { Formula, Fx } from "../components/ui/Formula";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
 import { RaidChip } from "../components/entities";
+import { PageIcon } from "../components/PageIcon";
 import { zombies, zombieSlug, zombieSlugs, combat } from "../data";
 import { num, titleCase, duration, levelLabel } from "../lib/format";
 import type { Zombie } from "../data/types";
@@ -67,7 +68,7 @@ export function ZombiesIndex() {
 
   return (
     <div>
-      <PageHeader title="Zombies" kicker={`${zombies.length} zombies`}>
+      <PageHeader title="Zombies" icon={<PageIcon to="/zombies" />} kicker={`${zombies.length} zombies`}>
         <p>
           Your army. DPS is <span className="font-mono">str × 10 × dex ⁄ 2</span> and HP is <span className="font-mono">con × 100</span>.
           Below level 8 every zombie fights at its group's floor stats. Zombies without standalone art show a class-coloured monogram.
