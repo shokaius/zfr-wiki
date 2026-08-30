@@ -84,7 +84,7 @@ export function CropsIndex() {
         ]}
         toggles={[
           { key: "mut", label: "Grants a mutation", predicate: (c) => !!c.mutation },
-          { key: "seasonal", label: "Seasonal", predicate: (c) => c.seasonal },
+          { key: "seasonal", label: "Include seasonal", predicate: (c) => c.seasonal, mode: "include" },
         ]}
         initialSort={{ key: "level", dir: "asc" }}
       />
@@ -189,8 +189,7 @@ export function CropDetail() {
               </table>
             </div>
             <p className="mt-2 text-xs text-muted">
-              Mutation crops are read at the instant a zombie is harvested; crop age is ignored, so a bare seed counts. Per-hour and
-              per-tap rates are deliberately out of scope here.
+              Mutation crops are read at the instant a zombie is harvested; crop age is ignored, so a bare seed counts.
             </p>
           </Section>
         </div>
