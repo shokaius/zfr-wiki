@@ -2,6 +2,7 @@ export interface NavItem {
   label: string;
   to: string;
   icon: string; // game-asset filename (resolved via iconUrl)
+  iconClass?: string; // optional per-icon tweak (e.g. scale) applied to the img
 }
 export interface NavGroup {
   title: string;
@@ -15,7 +16,7 @@ export const NAV: NavGroup[] = [
       { label: "Crops", to: "/crops", icon: "stex0006.png" },
       { label: "Zombies", to: "/zombies", icon: "ZombieActorOldMcZombie.png" },
       { label: "Enemies", to: "/enemies", icon: "FarmStageActorFarmhand.png" },
-      { label: "Placeables", to: "/placeables", icon: "fruitTreeApple.png" },
+      { label: "Placeables", to: "/placeables", icon: "fruitTreeApple.png", iconClass: "scale-90" },
       { label: "Boosts", to: "/boosts", icon: "golden_dice.png" },
       { label: "Mutations", to: "/mutations", icon: "icon_mutation_garlic.png" },
       { label: "Abilities", to: "/abilities", icon: "ability_bash.png" },

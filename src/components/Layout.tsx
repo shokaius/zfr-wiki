@@ -24,7 +24,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                     }`
                   }
                 >
-                  <GameIcon file={item.icon} alt="" size="sm" fallback="none" className="!h-5 !w-5" />
+                  <GameIcon file={item.icon} alt="" size="sm" fallback="none" className={`!h-5 !w-5 ${item.iconClass ?? ""}`} />
                   {item.label}
                 </NavLink>
               </li>
