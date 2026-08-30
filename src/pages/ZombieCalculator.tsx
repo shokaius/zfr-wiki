@@ -13,7 +13,6 @@ import {
   metricUnit,
   OPTIMIZE_LABELS,
   CROPS_TO_GUARANTEE,
-  SCALE_CAP,
   type CalcSettings,
   type OptimizeKind,
   type BuildResult,
@@ -132,7 +131,6 @@ export function ZombieCalculatorPage() {
                 className="w-16 rounded-md border border-border bg-surface px-2 py-1.5 text-sm tabular outline-none focus:border-primary"
               />
             </div>
-            <div className="mt-1.5 text-xs text-muted">Stats stop scaling at level {SCALE_CAP}; higher levels only unlock more mutations.</div>
           </div>
 
           {/* Build power */}
@@ -199,10 +197,7 @@ export function ZombieCalculatorPage() {
                               <span className="inline-block h-2 w-2 shrink-0 rounded-full" style={{ background: r.zombie.classColor }} title={r.zombie.className} />
                             )}
                           </div>
-                          <div className="text-xs text-muted">
-                            {r.zombie.group}
-                            {r.belowLevel && <span className="ml-1.5 text-danger">unlocks Lv {r.zombie.level}</span>}
-                          </div>
+                          <div className="text-xs text-muted">{r.zombie.group}</div>
                         </div>
                       </div>
                     </td>

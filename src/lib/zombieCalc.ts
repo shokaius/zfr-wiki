@@ -241,29 +241,29 @@ export interface BuildResult {
   baseValue: number; // metric without mutations
   picks: Mutation[];
   recipe: Recipe;
-  belowLevel: boolean; // unlock level above the chosen level (market zombies only)
 }
 
 export function computeBuilds(s: CalcSettings): BuildResult[] {
   const pool = zombies.filter((z) => {
     if (s.optimize === "heal" && z.group !== HEAL_GROUP) return false;
+    // Unlock gate: market zombies carry a real unlock level; specials/event
+    // zombies carry a sentinel (<=0) and pass, governed by their source toggle.
+    if (z.level > s.level) return false;
     return included(z, s);
   });
 
   const out = pool.map((z): BuildResult => {
     const build = bestBuild(z, s);
     const base = scaledStats(z, s.level);
-    const src = sourceOf(z);
     return {
       zombie: z,
-      source: src,
+      source: sourceOf(z),
       base,
       stats: build.stats,
       value: build.value,
       baseValue: metricOf(s.optimize, base),
       picks: build.picks,
       recipe: buildRecipe(z, build.picks),
-      belowLevel: (src === "gold" || src === "brains") && z.level > s.level,
     };
   });
 
