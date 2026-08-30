@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { NAV } from "../nav";
 import { ThemeToggle } from "./ThemeToggle";
 import { QuickLookup, openQuickLookup } from "./QuickLookup";
+import { GameIcon } from "./ui/GameIcon";
 import { GAME } from "../lib/gameMeta";
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
@@ -23,9 +24,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                     }`
                   }
                 >
-                  <span className="w-4 text-center text-xs opacity-70" aria-hidden="true">
-                    {item.icon}
-                  </span>
+                  <GameIcon file={item.icon} alt="" size="sm" fallback="none" className="!h-5 !w-5" />
                   {item.label}
                 </NavLink>
               </li>

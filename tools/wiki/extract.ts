@@ -852,6 +852,12 @@ writeJson("combat", {
 // ===========================================================================
 // Always-copy HUD icons (currencies + generic fallbacks) + the game logo.
 for (const f of ["topbar_money_icon.png", "topbar_brain_icon.png", "topbar_exp_icon.png", "topbar_level_icon.png", "topbar_zombie_icon.png", "logo.png"]) ref(f);
+// Representative icons used by the site nav / home cards (see src/nav.ts).
+for (const f of [
+  "stex0006.png", "ZombieActorOldMcZombie.png", "FarmStageActorFarmhand.png", "fruitTreeApple.png",
+  "golden_dice.png", "monolithMutation.png", "ability_bash.png", "portrait_pirate.png",
+  "zombieCombiner.png", "Icon_Quest_HarvestZombies.png", "main-icon.png",
+]) ref(f);
 
 // Build a basename -> abspath index, walking dirs in priority order (first wins).
 const SCAN_ORDER = ["ui", "crop-icons", "boosts", "objects", "zombie", "crops", "raids/images", "raids/enemies", "raids/loot", "raids", "epic-bosses", "player", "pets", "scenery", "ground", "title", "tutorial"];

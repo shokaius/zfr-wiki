@@ -143,7 +143,7 @@ export function searchItems(): SearchItem[] {
   // Top-level pages.
   for (const group of NAV)
     for (const item of group.items)
-      out.push({ id: `pg-${item.to}`, type: "Page", name: item.label, subtitle: "Go to page", to: item.to, emoji: item.icon, keywords: group.title });
+      out.push({ id: `pg-${item.to}`, type: "Page", name: item.label, subtitle: "Go to page", to: item.to, iconFile: item.icon, keywords: group.title });
 
   cache = out;
   return out;
