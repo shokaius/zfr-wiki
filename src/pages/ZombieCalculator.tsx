@@ -19,15 +19,17 @@ import {
   type Source,
 } from "../lib/zombieCalc";
 
-const STORAGE_KEY = "zfr-calc-settings-v1";
+const STORAGE_KEY = "zfr-calc-settings-v2";
 const DEFAULTS: CalcSettings = {
   optimize: "con",
   level: 45,
   mutations: true,
   combinations: true,
   includeBrains: false,
-  includeSpecial: false,
-  includeUnobtainable: false,
+  includeCombine: false,
+  includeEpic: false,
+  includeRaid: false,
+  includeEvent: false,
 };
 
 function useCalcSettings(): [CalcSettings, (p: Partial<CalcSettings>) => void] {
@@ -53,8 +55,10 @@ function useCalcSettings(): [CalcSettings, (p: Partial<CalcSettings>) => void] {
 const SOURCE_META: Record<Source, { label: string; color: string }> = {
   gold: { label: "Gold market", color: "rgb(var(--accent-gold))" },
   brains: { label: "Brain purchase", color: "rgb(var(--accent-brain))" },
-  reward: { label: "Reward only", color: "rgb(var(--text-muted))" },
-  hidden: { label: "Combine / event", color: "rgb(var(--class-special))" },
+  combine: { label: "Combine", color: "rgb(var(--class-special))" },
+  epic: { label: "Epic boss", color: "rgb(var(--danger))" },
+  raid: { label: "Raid drop", color: "rgb(var(--class-blue))" },
+  event: { label: "Event / limited", color: "rgb(var(--text-muted))" },
 };
 
 function Checkbox({ checked, onChange, disabled, children }: { checked: boolean; onChange: (v: boolean) => void; disabled?: boolean; children: ReactNode }) {
@@ -148,9 +152,12 @@ export function ZombieCalculatorPage() {
             </div>
             <div className="mt-2 flex flex-wrap gap-1.5">
               <FilterToggle on={s.includeBrains} onClick={() => patch({ includeBrains: !s.includeBrains })}>Brain-purchase</FilterToggle>
-              <FilterToggle on={s.includeSpecial} onClick={() => patch({ includeSpecial: !s.includeSpecial })}>Special</FilterToggle>
-              <FilterToggle on={s.includeUnobtainable} onClick={() => patch({ includeUnobtainable: !s.includeUnobtainable })}>Unobtainable</FilterToggle>
+              <FilterToggle on={s.includeCombine} onClick={() => patch({ includeCombine: !s.includeCombine })}>Combine</FilterToggle>
+              <FilterToggle on={s.includeEpic} onClick={() => patch({ includeEpic: !s.includeEpic })}>Epic boss</FilterToggle>
+              <FilterToggle on={s.includeRaid} onClick={() => patch({ includeRaid: !s.includeRaid })}>Raid drop</FilterToggle>
+              <FilterToggle on={s.includeEvent} onClick={() => patch({ includeEvent: !s.includeEvent })}>Event</FilterToggle>
             </div>
+            <div className="mt-1 text-xs text-muted">Beyond the gold market. Combine specials need level 25+.</div>
           </div>
         </div>
       </Panel>
@@ -294,7 +301,7 @@ function RecipeView({ r, unit, showCombine }: { r: BuildResult; unit: string; sh
               view {r.zombie.name} →
             </Link>
           </p>
-          {promo && showCombine && (
+          {promo && (showCombine || r.source === "combine") && (
             <p className="mt-1.5 text-sm text-muted">
               <span className="font-medium text-text">{promo.tier} route:</span> combine {promo.from}
               {promo.needsLevel25 && " at level 25+"}
@@ -392,14 +399,11 @@ function MutationPill({ name, stat, crop }: { name: string; stat: string; crop: 
 function obtainText(r: BuildResult): string {
   const z = r.zombie;
   const cost = z.cost ? num(z.cost) : "";
-  switch (r.source) {
-    case "gold":
-      return `Buy from the market${cost ? ` for ${cost} gold` : ""}${z.level > 0 ? ` (unlocks Lv ${z.level})` : ""}.`;
-    case "brains":
-      return `Buy from the market${cost ? ` for ${cost} brains` : ""}.`;
-    case "reward":
-      return `Reward-only zombie - earned from quests or events, not sold.`;
-    case "hidden":
-      return `Not sold in the market - obtained by combining or from a limited event.`;
-  }
+  const unlk = z.level > 0 ? ` (unlocks Lv ${z.level})` : "";
+  if (r.source === "gold") return `Buy from the market${cost ? ` for ${cost} gold` : ""}${unlk}.`;
+  if (r.source === "brains") return `Buy from the market${cost ? ` for ${cost} brains` : ""}${unlk}.`;
+  if (r.source === "raid") return `Rare drop from the ${z.dropRaid?.name ?? "invasion"} raid.`;
+  if (r.source === "epic") return `Reward from an epic boss event - activate the boss and clear its rungs.`;
+  if (r.source === "combine") return `Not sold - build it in the Zombie Pot (combine route below).`;
+  return `Seasonal or limited-event zombie - not normally sold.`;
 }

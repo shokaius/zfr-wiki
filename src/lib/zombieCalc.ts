@@ -22,9 +22,11 @@ export interface CalcSettings {
   level: number;
   mutations: boolean;
   combinations: boolean;
-  includeBrains: boolean;
-  includeSpecial: boolean;
-  includeUnobtainable: boolean;
+  includeBrains: boolean; // brains-market (Cupid, Bombie...)
+  includeCombine: boolean; // Zombie Pot tier-5 group specials (Zombutterfly...)
+  includeEpic: boolean; // epic-boss event rewards
+  includeRaid: boolean; // rare invasion drops (Old McZombie, Teddy...)
+  includeEvent: boolean; // seasonal / limited / otherwise not sold
 }
 
 export const OPTIMIZE_LABELS: Record<OptimizeKind, string> = {
@@ -143,20 +145,36 @@ function bestBuild(z: Zombie, s: CalcSettings): BestBuild {
 }
 
 // ---- candidate pool (the additive source toggles) ------------------------
-export type Source = "gold" | "brains" | "reward" | "hidden";
+// How a zombie is actually acquired. Gold-market is always in; every other
+// source is an opt-in toggle. Priority resolves the market flags first, then
+// the acquisition data (raid drop / epic reward), then the pot's tier-5 group
+// specials, leaving seasonal / limited zombies as "event".
+export type Source = "gold" | "brains" | "combine" | "epic" | "raid" | "event";
+
+const COMBINE_TARGETS = new Set<string>([
+  ...Object.values(combat.combine.blueByGroup),
+  ...Object.values(combat.combine.redByGroup),
+  ...Object.values(combat.combine.silverByGroup),
+  ...Object.values(combat.combine.specialByGroup),
+]);
+
 export function sourceOf(z: Zombie): Source {
   if (!z.brainsNeeded && !z.rewardOnly && !z.marketHidden) return "gold";
-  if (z.brainsNeeded && !z.rewardOnly && !z.marketHidden) return "brains";
-  return z.rewardOnly ? "reward" : "hidden";
+  if (!z.rewardOnly && !z.marketHidden) return "brains"; // brainsNeeded market unit
+  if (z.dropRaid) return "raid";
+  if (z.acquisition.includes("epic-reward")) return "epic";
+  if (z.marketHidden && COMBINE_TARGETS.has(z.key)) return "combine";
+  return "event";
 }
 
 function included(z: Zombie, s: CalcSettings): boolean {
   const src = sourceOf(z);
   if (src === "gold") return true;
   if (src === "brains") return s.includeBrains;
-  // reward-only / market-hidden: opt in via "special" (named/promoted) or "unobtainable"
-  if (s.includeSpecial && z.category === "special") return true;
-  return s.includeUnobtainable;
+  if (src === "combine") return s.includeCombine;
+  if (src === "epic") return s.includeEpic;
+  if (src === "raid") return s.includeRaid;
+  return s.includeEvent; // event
 }
 
 // ---- combine-promotion recipe (silver/special) ---------------------------
