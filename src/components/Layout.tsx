@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { NAV } from "../nav";
 import { ThemeToggle } from "./ThemeToggle";
+import { QuickLookup, openQuickLookup } from "./QuickLookup";
 import { GAME } from "../lib/gameMeta";
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
@@ -61,6 +62,19 @@ export function Layout({ children }: { children: ReactNode }) {
             </span>
           </Link>
           <div className="ml-auto flex items-center gap-2">
+            <button
+              onClick={openQuickLookup}
+              className="btn gap-2 !px-2.5 text-muted"
+              aria-label="Quick lookup"
+              title="Quick lookup (Shift+P)"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span className="hidden text-xs sm:inline">Search</span>
+              <kbd className="hidden rounded border border-border px-1 text-[10px] sm:inline">⇧P</kbd>
+            </button>
             <a
               href={GAME.repoUrl}
               target="_blank"
@@ -96,6 +110,9 @@ export function Layout({ children }: { children: ReactNode }) {
         {/* Content */}
         <main className="min-w-0 flex-1 py-6">{children}</main>
       </div>
+
+      <QuickLookup />
+
 
       <footer className="mt-8 border-t border-border">
         <div className="mx-auto max-w-content px-4 py-6 text-xs text-muted">
