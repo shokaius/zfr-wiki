@@ -1,5 +1,5 @@
 export function num(n: number | null | undefined, opts?: { digits?: number }): string {
-  if (n === null || n === undefined || Number.isNaN(n)) return "—";
+  if (n === null || n === undefined || Number.isNaN(n)) return "-";
   const digits = opts?.digits ?? (Number.isInteger(n) ? 0 : 2);
   return n.toLocaleString("en-US", {
     minimumFractionDigits: 0,
@@ -8,7 +8,7 @@ export function num(n: number | null | undefined, opts?: { digits?: number }): s
 }
 
 export function pct(fraction: number | null | undefined, digits = 1): string {
-  if (fraction === null || fraction === undefined || Number.isNaN(fraction)) return "—";
+  if (fraction === null || fraction === undefined || Number.isNaN(fraction)) return "-";
   return `${(fraction * 100).toLocaleString("en-US", {
     minimumFractionDigits: 0,
     maximumFractionDigits: digits,
@@ -16,12 +16,12 @@ export function pct(fraction: number | null | undefined, digits = 1): string {
 }
 
 export function signed(n: number | null | undefined): string {
-  if (n === null || n === undefined || Number.isNaN(n)) return "—";
+  if (n === null || n === undefined || Number.isNaN(n)) return "-";
   return n > 0 ? `+${num(n)}` : num(n);
 }
 
 export function duration(ms: number | null | undefined): string {
-  if (ms === null || ms === undefined || ms <= 0) return "—";
+  if (ms === null || ms === undefined || ms <= 0) return "-";
   const s = Math.round(ms / 1000);
   if (s < 60) return `${s}s`;
   const m = Math.round(s / 60);
@@ -34,7 +34,7 @@ export function duration(ms: number | null | undefined): string {
 
 /** Unlock-level label; anything at or below 0 is "pre-unlocked" and shows a dash. */
 export function levelLabel(n: number | null | undefined): string {
-  if (n === null || n === undefined || n <= 0) return "—";
+  if (n === null || n === undefined || n <= 0) return "-";
   return `Lv ${n}`;
 }
 

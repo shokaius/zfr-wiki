@@ -38,7 +38,7 @@ const CLASS_VAR: Record<string, string> = {
 };
 
 export function ClassBadge({ value }: { value: string | null | undefined }) {
-  if (!value) return <span className="text-muted">—</span>;
+  if (!value) return <span className="text-muted">-</span>;
   const key = value.toLowerCase();
   const varName = CLASS_VAR[key];
   const color = varName ? `rgb(var(${varName}))` : undefined;
@@ -52,7 +52,7 @@ export function ClassBadge({ value }: { value: string | null | undefined }) {
 export function SeasonalBadge({ theme }: { theme: string | null | undefined }) {
   if (!theme || theme === "evergreen") return null;
   return (
-    <Badge color="rgb(var(--accent-brain))" title={`Seasonal — ${theme}`}>
+    <Badge color="rgb(var(--accent-brain))" title={`Seasonal - ${theme}`}>
       {theme}
     </Badge>
   );

@@ -55,8 +55,14 @@ export function Layout({ children }: { children: ReactNode }) {
             </svg>
           </button>
           <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold !text-text">
+            <span className="hidden lg:inline-flex">
+              <GameIcon file="ZombieActorOldMcZombie.png" alt="" fallback="none" className="!h-7 !w-7" />
+            </span>
             <span>
               ZFR <span className="text-muted">Wiki</span>
+            </span>
+            <span className="hidden lg:inline-flex">
+              <GameIcon file="stex0006.png" alt="" fallback="none" className="!h-6 !w-6" />
             </span>
           </Link>
           <div className="ml-auto flex items-center gap-2">

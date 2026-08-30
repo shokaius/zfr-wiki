@@ -92,9 +92,9 @@ export function ProgressionPage() {
               <tr>
                 <td className="font-medium">Starting farm</td>
                 <td className="text-right tabular">30×30</td>
-                <td className="text-right tabular">—</td>
-                <td className="text-right tabular">—</td>
-                <td className="text-right tabular">—</td>
+                <td className="text-right tabular">-</td>
+                <td className="text-right tabular">-</td>
+                <td className="text-right tabular">-</td>
               </tr>
               {upgrades.mapSize.map((u) => (
                 <tr key={u.size}>
@@ -113,7 +113,7 @@ export function ProgressionPage() {
             </tbody>
           </table>
         </div>
-        <Note tone="muted">Farm-size upgrades are either/or on currency — pay gold or brains, not both. Purchases are sequential (no skipping tiers).</Note>
+        <Note tone="muted">Farm-size upgrades are either/or on currency - pay gold or brains, not both. Purchases are sequential (no skipping tiers).</Note>
       </Section>
     </div>
   );

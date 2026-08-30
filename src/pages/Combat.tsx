@@ -18,12 +18,12 @@ export function CombatPage() {
         <div className="grid gap-3 md:grid-cols-2">
           <Panel>
             <ul className="space-y-2 text-sm">
-              <li><span className="font-mono">power = str × {c.powerPerStr}</span> — damage per hit</li>
+              <li><span className="font-mono">power = str × {c.powerPerStr}</span> - damage per hit</li>
               <li><span className="font-mono">hitPoints = con × {c.hpPerCon}</span></li>
               <li><span className="font-mono">attackInterval = {c.attackIntervalSec.player} ⁄ dex</span> (players); enemies use {c.attackIntervalSec.enemy}s flat</li>
               <li><span className="font-mono">DPS = str × {c.powerPerStr} × dex ⁄ {c.attackIntervalSec.player}</span></li>
               <li>Veterancy multiplier: <span className="font-mono">1 + {c.vetStatStep} × rank</span> on all stats (max ×{(1 + c.vetStatStep * (c.vetThresholds.length - 1)).toFixed(2)} at {c.vetRanks[c.vetRanks.length - 1]})</li>
-              <li>Mutations are added <em>flat</em>, after level scaling — never multiplied.</li>
+              <li>Mutations are added <em>flat</em>, after level scaling - never multiplied.</li>
             </ul>
             <div className="mt-2"><SourceCite file="src/raid/combatStats.ts" label="combatStats.ts" /></div>
           </Panel>
@@ -74,7 +74,7 @@ export function CombatPage() {
 
       <Section title="Lineup depth bands">
         <p className="mb-2 text-sm text-muted">
-          Applied to player zombies only (enemies never pass through them). Zombies past the front five swing softer and slower — so
+          Applied to player zombies only (enemies never pass through them). Zombies past the front five swing softer and slower - so
           slots 0–4 are your damage, and deeper slots are pure HP soak.
         </p>
         <div className="overflow-x-auto rounded-lg border border-border">

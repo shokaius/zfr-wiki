@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  /* Light theme — warm "paper + soil" ground with a grassy green primary. */
+  /* Light theme - warm "paper + soil" ground with a grassy green primary. */
   :root {
     --bg: 244 241 232;
     --surface: 255 255 255;
@@ -17,7 +17,7 @@
     --accent-gold: 197 143 34;
     --danger: 176 54 43;
 
-    /* Zombie class colors — stable across themes. */
+    /* Zombie class colors - stable across themes. */
     --class-green: 78 154 61;
     --class-blue: 59 124 196;
     --class-red: 192 57 43;
@@ -120,7 +120,7 @@
     @apply border-primary bg-primary/10 text-primary-strong;
   }
 
-  /* Data table baseline — dense but scannable. */
+  /* Data table baseline - dense but scannable. */
   .data-table {
     @apply w-full border-collapse text-sm;
   }

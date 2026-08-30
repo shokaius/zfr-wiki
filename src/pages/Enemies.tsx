@@ -128,8 +128,8 @@ export function EnemyDetail() {
                       <tr key={i}>
                         <td>{a.name}</td>
                         <td className="text-right tabular">{a.frequency}</td>
-                        <td className="text-right tabular">{a.damage != null ? String(a.damage) : "—"}</td>
-                        <td className="text-right tabular">{a.hp != null ? num(a.hp) : "—"}</td>
+                        <td className="text-right tabular">{a.damage != null ? String(a.damage) : "-"}</td>
+                        <td className="text-right tabular">{a.hp != null ? num(a.hp) : "-"}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -139,7 +139,7 @@ export function EnemyDetail() {
           )}
           <Section title="Appears in">
             <div className="flex flex-wrap gap-2">
-              {e.usedIn.length ? e.usedIn.map((r) => <span key={r} className="chip">{r}</span>) : <span className="text-muted">—</span>}
+              {e.usedIn.length ? e.usedIn.map((r) => <span key={r} className="chip">{r}</span>) : <span className="text-muted">-</span>}
             </div>
           </Section>
         </div>

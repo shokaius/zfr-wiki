@@ -14,7 +14,7 @@ function initials(name: string): string {
 
 /**
  * Every zombie has a pre-rendered portrait (zombie/portrait/<key>.png), so this
- * shows real art for all of them — including the part-assembled specials. The
+ * shows real art for all of them - including the part-assembled specials. The
  * class-coloured monogram remains only as a last resort if a portrait fails.
  */
 export function ZombieIcon({ zombie, size = "md", className = "" }: { zombie: Zombie; size?: Size; className?: string }) {

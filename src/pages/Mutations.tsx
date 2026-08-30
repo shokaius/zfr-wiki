@@ -20,7 +20,7 @@ export function MutationsPage() {
       <PageHeader title="Mutations" icon={<PageIcon to="/mutations" />} kicker={`${mutations.length} mutations · ${mutationsFile.slots.length} slots`}>
         <p>
           A zombie has five anatomical slots, each holding at most one mutation. Mutations roll at harvest against whatever crop is
-          planted in adjacent plots. Same-slot mutations conflict — the higher catalog bit wins in the Zombie Pot, or the lower random
+          planted in adjacent plots. Same-slot mutations conflict - the higher catalog bit wins in the Zombie Pot, or the lower random
           roll wins at harvest.
         </p>
       </PageHeader>
@@ -62,7 +62,7 @@ export function MutationsPage() {
                         ))}
                       </div>
                     </td>
-                    <td className="text-right tabular">{m.unlockLevel != null ? `Lv ${m.unlockLevel}` : "—"}</td>
+                    <td className="text-right tabular">{m.unlockLevel != null ? `Lv ${m.unlockLevel}` : "-"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -79,18 +79,18 @@ export function MutationsPage() {
                 Each adjacent plot growing a mutation crop adds{" "}
                 <span className="font-semibold">{pct(mutationsFile.chancePerPlot)}</span> to that mutation's chance, capped at 100%.
               </li>
-              <li>Adjacency is a distance test (within one plot-width on both axes) — up to 8 neighbours, corners included.</li>
+              <li>Adjacency is a distance test (within one plot-width on both axes) - up to 8 neighbours, corners included.</li>
               <li>Crop age is ignored; only the planted crop key is read, so bare seeds count. Rolled once, at harvest.</li>
               <li>Rolls are independent per mutation; expected count = neighbours × {mutationsFile.chancePerPlot} regardless of layout.</li>
               <li>Same-slot conflict: at harvest the lower random roll wins; in the Zombie Pot the higher catalog bit wins.</li>
-              <li>Headless bodies refuse head and hair/eye entirely. Pumpking inverts it — only headless can grow one, but any zombie can wear one via the pot.</li>
+              <li>Headless bodies refuse head and hair/eye entirely. Pumpking inverts it - only headless can grow one, but any zombie can wear one via the pot.</li>
               <li>A Mutant Monolith forces every eligible roll to succeed; pre-mutated seed zombies enter with their bit already set.</li>
             </ul>
           </Panel>
           <div className="space-y-2">
             <Note>
               <strong>Bit order is catalog order.</strong> A higher-bit mutation overwrites a lower one in the same slot when combining,
-              so filling a slot early (e.g. Potato head) costs nothing later — Coffee then Garlic overwrite it cleanly.
+              so filling a slot early (e.g. Potato head) costs nothing later - Coffee then Garlic overwrite it cleanly.
             </Note>
             <div className="card p-3 text-sm">
               <div className="mb-1 font-medium">Sources</div>

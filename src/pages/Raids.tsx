@@ -67,7 +67,7 @@ export function RaidsIndex() {
             <ZombieChip k={raid.rare.key} /> <span className="text-muted">{pct(ev.rareRate, 2)} · ~{num(ev.rareExpectedWins ?? 0)} wins</span>
           </span>
         ) : (
-          <span className="text-muted">—</span>
+          <span className="text-muted">-</span>
         ),
     },
   ];
@@ -76,8 +76,8 @@ export function RaidsIndex() {
     <div>
       <PageHeader title="Raids" icon={<PageIcon to="/raids" />} kicker={`${raids.length} raids`}>
         <p>
-          Invasions reward gold, brains, boosts, and — on four of them — a rare zombie. XP is paid only on the first clear. The gold,
-          brains, and rare-zombie columns are expected values computed from the assumptions in the toggle bar below.
+          Raids pay gold, brains, and boosts on every win, and four of them can also drop a rare zombie. XP only comes from your first
+          clear of each. The gold, brains, and rare-zombie figures below update as you change the toggle bar.
         </p>
       </PageHeader>
 
@@ -86,8 +86,8 @@ export function RaidsIndex() {
       <DataTable rows={rows} columns={columns} rowKey={(r) => String(r.raid.id)} initialSort={{ key: "unlock", dir: "asc" }} />
 
       <Note tone="muted">
-        Net gold counts win gold (scaled by survival), the bonus-gold and voucher-refund loot picks, and — when "Sell decorations" is
-        on — the expected decoration sell value. Elite subtracts the 10,000-gold Brain Ticket and quadruples brain & rare luck; enemy
+        Net gold counts win gold (scaled by survival), the bonus-gold and voucher-refund loot picks, and - when "Sell decorations" is
+        on - the expected decoration sell value. Elite subtracts the 10,000-gold Brain Ticket and quadruples brain & rare luck; enemy
         difficulty (much harder) isn't modeled here.
       </Note>
     </div>
@@ -174,7 +174,7 @@ export function RaidDetail() {
                           </td>
                           <td><Badge>{KIND_LABEL[it.kind] ?? it.kind}</Badge></td>
                           <td className="text-right tabular">
-                            {it.kind === "brains" ? <Brains value={it.brainValue} /> : it.kind === "decor" ? <Gold value={it.sellValue} /> : it.goldValue ? <Gold value={it.goldValue} /> : "—"}
+                            {it.kind === "brains" ? <Brains value={it.brainValue} /> : it.kind === "decor" ? <Gold value={it.sellValue} /> : it.goldValue ? <Gold value={it.goldValue} /> : "-"}
                           </td>
                           <td className="text-right tabular">{pct(p, 1)}</td>
                         </tr>

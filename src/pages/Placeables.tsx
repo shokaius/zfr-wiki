@@ -26,7 +26,7 @@ export function PlaceablesIndex() {
         <Link to={`/placeables/${placeableSlug(p)}`} className="inline-flex items-center gap-2 font-medium !text-text hover:!text-primary-strong">
           <GameIcon file={p.sprite} alt="" size="sm" fallback="none" />
           {p.name}
-          {!p.available && <UnavailableBadge reason={p.themeLabel ? `Seasonal — ${p.themeLabel}` : undefined} />}
+          {!p.available && <UnavailableBadge reason={p.themeLabel ? `Seasonal - ${p.themeLabel}` : undefined} />}
         </Link>
       ),
     },
@@ -41,7 +41,7 @@ export function PlaceablesIndex() {
       header: "Effect / yield",
       value: (p) => p.effect ?? "",
       render: (p) =>
-        p.effect ? <span className="text-sm">{p.effect}</span> : p.growMs ? <span className="text-sm text-muted">regrow {duration(p.growMs)}</span> : <span className="text-muted">—</span>,
+        p.effect ? <span className="text-sm">{p.effect}</span> : p.growMs ? <span className="text-sm text-muted">regrow {duration(p.growMs)}</span> : <span className="text-muted">-</span>,
     },
   ];
 
@@ -103,7 +103,7 @@ export function PlaceableDetail() {
           {p.storageSlots > 0 && <KeyRow label="Item storage">+{p.storageSlots}</KeyRow>}
           {p.growMs > 0 && <KeyRow label="Regrow">{duration(p.growMs)}</KeyRow>}
           {p.harvestValue > 0 && <KeyRow label="Harvest"><Gold value={p.harvestValue} /></KeyRow>}
-          <KeyRow label="Buyable now">{p.available ? "Yes" : `No${p.themeLabel ? ` — ${p.themeLabel}` : ""}`}</KeyRow>
+          <KeyRow label="Buyable now">{p.available ? "Yes" : `No${p.themeLabel ? ` - ${p.themeLabel}` : ""}`}</KeyRow>
         </Panel>
         <div>
           {p.effect && (

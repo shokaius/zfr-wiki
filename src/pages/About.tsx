@@ -39,7 +39,7 @@ export function AboutPage() {
     <div>
       <PageHeader title="Sources & about" icon={<PageIcon to="/about" />} kicker="how this wiki is built">
         <p>
-          Every page is generated from the Zombie Farm 2 Reforged repo — JSON assets read directly, TypeScript constants imported (never
+          Every page is generated from the Zombie Farm 2 Reforged repo - JSON assets read directly, TypeScript constants imported (never
           re-parsed) and run through the game's own functions. So the wiki can't disagree with the game, and a balance patch shows up
           here as a diff.
         </p>
@@ -89,7 +89,7 @@ export function AboutPage() {
           <Section title="Provenance">
             <Note>
               Zombie Farm 2 was a mobile game by The Playforge (pulled from the App Store in 2017). ZF2R is a non-commercial preservation
-              reimplementation — art, audio, and formulas recovered from the shipped iOS binary. The underlying IP belongs to The
+              reimplementation - art, audio, and formulas recovered from the shipped iOS binary. The underlying IP belongs to The
               Playforge; this wiki is a fan reference over that project.
             </Note>
           </Section>

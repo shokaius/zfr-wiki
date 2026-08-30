@@ -21,7 +21,7 @@ const ACQ_LABEL: Record<string, string> = {
 };
 
 function Cost({ z }: { z: Zombie }) {
-  if (z.marketHidden || z.rewardOnly) return <span className="text-muted">—</span>;
+  if (z.marketHidden || z.rewardOnly) return <span className="text-muted">-</span>;
   return z.brainsNeeded ? <Brains value={z.cost} /> : <Gold value={z.cost} />;
 }
 
@@ -158,7 +158,7 @@ export function ZombieDetail() {
             <div className="mb-4">
               <Note tone="warn">
                 <strong>Decayer.</strong> This zombie's base stats sit below its {z.group} group floor ({floor?.str}/{floor?.con}/
-                {floor?.dex}), so it <em>loses</em> effective stats as you level past 8 — invisible in-game.
+                {floor?.dex}), so it <em>loses</em> effective stats as you level past 8 - invisible in-game.
               </Note>
             </div>
           )}
@@ -214,8 +214,8 @@ export function ZombieDetail() {
                   {z.abilities.map((a) => (
                     <tr key={a.tier} className={a.key ? "" : "opacity-50"}>
                       <td className="text-right tabular">t{a.tier}</td>
-                      <td className="font-medium">{a.label ?? "—"}</td>
-                      <td className="text-muted">{a.effect ?? "—"}</td>
+                      <td className="font-medium">{a.label ?? "-"}</td>
+                      <td className="text-muted">{a.effect ?? "-"}</td>
                       <td>{a.bossGate}</td>
                       <td className="text-center">{a.available ? "✓" : "✗"}</td>
                     </tr>

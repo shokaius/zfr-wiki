@@ -23,8 +23,8 @@ export function AbilitiesPage() {
       ),
     },
     { key: "effect", header: "Effect", value: (a) => a.effect, render: (a) => <span className="text-sm text-muted">{a.effect}</span> },
-    { key: "kind", header: "Kind", sortable: true, value: (a) => a.kind ?? "", render: (a) => (a.kind ? <Badge>{titleCase(a.kind)}</Badge> : "—") },
-    { key: "tier", header: "Tier", sortable: true, align: "right", value: (a) => a.poolTier ?? 99, render: (a) => (a.poolTier ? `t${a.poolTier}` : "—") },
+    { key: "kind", header: "Kind", sortable: true, value: (a) => a.kind ?? "", render: (a) => (a.kind ? <Badge>{titleCase(a.kind)}</Badge> : "-") },
+    { key: "tier", header: "Tier", sortable: true, align: "right", value: (a) => a.poolTier ?? 99, render: (a) => (a.poolTier ? `t${a.poolTier}` : "-") },
     {
       key: "groups",
       header: "Groups",
@@ -39,7 +39,7 @@ export function AbilitiesPage() {
         </div>
       ),
     },
-    { key: "boss", header: "Boss gate", value: (a) => a.bossGate ?? "", render: (a) => <span className="text-sm">{a.bossGate ?? "—"}</span> },
+    { key: "boss", header: "Boss gate", value: (a) => a.bossGate ?? "", render: (a) => <span className="text-sm">{a.bossGate ?? "-"}</span> },
   ];
 
   const heal = abilities.find((a) => a.key === "heal");
@@ -76,11 +76,11 @@ export function AbilitiesPage() {
                   return (
                     <tr key={a.key}>
                       <td className="font-medium">{a.label}</td>
-                      <td className="text-right tabular">{x.damageFactor ? `${x.damageFactor}×` : "—"}</td>
-                      <td className="text-center">{x.aoe ? "✓" : "—"}</td>
-                      <td className="text-right tabular">{x.stunMs ? `${Number(x.stunMs) / 1000}s` : "—"}</td>
-                      <td className="text-right tabular">{x.cooldownMs ? `${Number(x.cooldownMs) / 1000}s` : "—"}</td>
-                      <td className="text-center">{x.hitBoss ? "✓" : "—"}</td>
+                      <td className="text-right tabular">{x.damageFactor ? `${x.damageFactor}×` : "-"}</td>
+                      <td className="text-center">{x.aoe ? "✓" : "-"}</td>
+                      <td className="text-right tabular">{x.stunMs ? `${Number(x.stunMs) / 1000}s` : "-"}</td>
+                      <td className="text-right tabular">{x.cooldownMs ? `${Number(x.cooldownMs) / 1000}s` : "-"}</td>
+                      <td className="text-center">{x.hitBoss ? "✓" : "-"}</td>
                     </tr>
                   );
                 })}
@@ -95,7 +95,7 @@ export function AbilitiesPage() {
             <p className="prose-tight text-sm">
               Heal is Garden-exclusive. Amount = <span className="font-mono">round(power × 0.5)</span> where power = str × 10, so a
               healer's strength is its throughput. Cadence is the healer's own <span className="font-mono">2.0 ⁄ dex</span> seconds.
-              Targeting picks the lowest HP-<em>fraction</em> deployed ally (not lowest absolute HP), excluding only itself — so healers
+              Targeting picks the lowest HP-<em>fraction</em> deployed ally (not lowest absolute HP), excluding only itself - so healers
               are valid targets and high-HP tanks can soak heals while squishies die. <span className="font-mono">wallInWay</span> blocks
               it, and healAOE (tier 4) runs on a separate 20-second timer that includes the caster.
             </p>

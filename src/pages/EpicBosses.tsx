@@ -23,7 +23,7 @@ export function EpicBossesIndex() {
         </Link>
       ),
     },
-    { key: "unlock", header: "Unlock", sortable: true, align: "right", value: (b) => b.unlockLevel ?? 999, render: (b) => (b.unlockLevel ? `Lv ${b.unlockLevel}` : "—") },
+    { key: "unlock", header: "Unlock", sortable: true, align: "right", value: (b) => b.unlockLevel ?? 999, render: (b) => (b.unlockLevel ? `Lv ${b.unlockLevel}` : "-") },
     { key: "cost", header: "Entry", sortable: true, align: "right", value: (b) => b.costBrains, render: (b) => <Brains value={b.costBrains} /> },
     { key: "rungs", header: "Rungs", align: "right", value: (b) => b.maxLevel },
     { key: "hp", header: "Base HP", sortable: true, align: "right", value: (b) => b.baseHp, render: (b) => num(b.baseHp) },
@@ -32,7 +32,7 @@ export function EpicBossesIndex() {
       key: "crop",
       header: "Favorite crop",
       value: (b) => b.favoriteCrop?.name ?? "",
-      render: (b) => (b.favoriteCrop ? <CropChip k={b.favoriteCrop.key} /> : "—"),
+      render: (b) => (b.favoriteCrop ? <CropChip k={b.favoriteCrop.key} /> : "-"),
     },
     {
       key: "prizes",
@@ -60,9 +60,9 @@ export function EpicBossesIndex() {
 
       <Section title="Boss Tokens">
         <Note>
-          A run is a purchase with a 14-day clock — there's no season calendar. Each ladder attempt costs one Boss Token, or{" "}
+          A run is a purchase with a 14-day clock - there's no season calendar. Each ladder attempt costs one Boss Token, or{" "}
           {epicBosses[0]?.fightBrainCost ?? 1} brain if you have none. Tokens drop only from <strong>crop</strong> harvests while a run is
-          active (never from zombies or trees), and the count resets to zero the moment the run completes or expires — they don't bank
+          active (never from zombies or trees), and the count resets to zero the moment the run completes or expires - they don't bank
           across events. Each boss has a favorite crop that raises its token rate. A rung is an HP pool chipped down across attempts
           inside a 2-hour encounter window; miss the window and the rung's HP fully restores. Per-plot-day token rates are a throughput
           calculation, deliberately out of scope here.
@@ -86,7 +86,7 @@ export function EpicBossDetail() {
         <div className="space-y-4">
           <Panel>
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Event</h2>
-            <KeyRow label="Unlock level">{b.unlockLevel ? `Lv ${b.unlockLevel}` : "—"}</KeyRow>
+            <KeyRow label="Unlock level">{b.unlockLevel ? `Lv ${b.unlockLevel}` : "-"}</KeyRow>
             <KeyRow label="Entry cost"><Brains value={b.costBrains} /></KeyRow>
             <KeyRow label="Ladder">{b.maxLevel} rungs</KeyRow>
             <KeyRow label="Window">{duration(b.durationMs)}</KeyRow>
@@ -124,8 +124,8 @@ export function EpicBossDetail() {
                       <tr key={z.key}>
                         <td><ZombieChip k={z.key} /></td>
                         <td>{z.className}</td>
-                        <td className="text-right tabular">{z.dps != null ? num(z.dps) : "—"}</td>
-                        <td className="text-right tabular">{z.hp != null ? num(z.hp) : "—"}</td>
+                        <td className="text-right tabular">{z.dps != null ? num(z.dps) : "-"}</td>
+                        <td className="text-right tabular">{z.hp != null ? num(z.hp) : "-"}</td>
                       </tr>
                     ))}
                   </tbody>

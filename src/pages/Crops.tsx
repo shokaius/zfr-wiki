@@ -38,7 +38,7 @@ export function CropsIndex() {
       header: "Grants",
       sortable: true,
       value: (c) => c.mutation?.name ?? "",
-      render: (c) => (c.mutation ? <MutationChip k={c.mutation.key} /> : <span className="text-muted">—</span>),
+      render: (c) => (c.mutation ? <MutationChip k={c.mutation.key} /> : <span className="text-muted">-</span>),
     },
     {
       key: "net",
@@ -145,7 +145,7 @@ export function CropDetail() {
                 )}
               </Panel>
             ) : (
-              <Note>This crop grants no mutation — it's grown purely for gold and XP.</Note>
+              <Note>This crop grants no mutation - it's grown purely for gold and XP.</Note>
             )}
           </Section>
 

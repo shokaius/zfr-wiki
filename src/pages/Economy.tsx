@@ -27,7 +27,7 @@ export function LevelingPage() {
                 <tr key={t.level}>
                   <td className="text-right tabular font-medium">{t.level}</td>
                   <td className="text-right tabular">{num(t.cumulativeXp)}</td>
-                  <td className="text-right tabular text-muted">{t.level === 1 ? "—" : num(t.delta)}</td>
+                  <td className="text-right tabular text-muted">{t.level === 1 ? "-" : num(t.delta)}</td>
                 </tr>
               ))}
             </tbody>
