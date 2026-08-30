@@ -11,6 +11,7 @@ import { AbilitiesPage } from "./pages/Abilities";
 import { RaidsIndex, RaidDetail } from "./pages/Raids";
 import { CombatPage } from "./pages/Combat";
 import { CombiningPage } from "./pages/Combining";
+import { ZombieCalculatorPage } from "./pages/ZombieCalculator";
 import { EpicBossesIndex, EpicBossDetail } from "./pages/EpicBosses";
 import { QuestsPage } from "./pages/Quests";
 import { LevelingPage } from "./pages/Economy";
@@ -40,6 +41,7 @@ export default function App() {
           <Route path="/raids/:slug" element={<RaidDetail />} />
           <Route path="/combat" element={<CombatPage />} />
           <Route path="/combining" element={<CombiningPage />} />
+          <Route path="/calculator" element={<ZombieCalculatorPage />} />
           <Route path="/epic-bosses" element={<EpicBossesIndex />} />
           <Route path="/epic-bosses/:slug" element={<EpicBossDetail />} />
           <Route path="/quests" element={<QuestsPage />} />

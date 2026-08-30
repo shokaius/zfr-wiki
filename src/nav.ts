@@ -38,6 +38,10 @@ export const NAV: NavGroup[] = [
     ],
   },
   {
+    title: "Tools",
+    items: [{ label: "Calculator", to: "/calculator", icon: "monolithMutation.png" }],
+  },
+  {
     title: "Reference",
     items: [
       { label: "Leveling", to: "/leveling", icon: "topbar_exp_icon.png" },

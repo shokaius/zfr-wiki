@@ -363,8 +363,12 @@ export interface CombatFile {
     maxPots: number;
     blueByGroup: Record<string, string>;
     redByGroup: Record<string, string>;
+    silverByGroup: Record<string, string>;
     specialByGroup: Record<string, string>;
   };
+  heal: { powerMult: number; aoeMs: number };
+  cropMutationChance: number;
+  maxAdjacentPlots: number;
   raid: { armyCap: number; minArmy: number; cooldownMs: number; eliteBrainLuck: number; brainPityInvasions: number; rareZombiePityWins: number };
   themes: { active: string[]; evergreen: string };
 }

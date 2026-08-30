@@ -34,6 +34,7 @@ import {
   COMBINE_SPECIAL_LEVEL,
   COMBINE_SPECIAL_CHANCE,
   COMBINE_SPECIAL_BY_GROUP,
+  COMBINE_SILVER_BY_GROUP,
   COMBINE_BLUE_BY_GROUP,
   COMBINE_RED_BY_GROUP,
 } from "../../game/src/zombie/combineSpecies";
@@ -847,8 +848,13 @@ writeJson("combat", {
     maxPots: MAX_ZOMBIE_POTS,
     blueByGroup: COMBINE_BLUE_BY_GROUP,
     redByGroup: COMBINE_RED_BY_GROUP,
+    silverByGroup: COMBINE_SILVER_BY_GROUP,
     specialByGroup: COMBINE_SPECIAL_BY_GROUP,
   },
+  // Heal ability magnitude/cadence. Consts are module-private in BattleSim.ts.
+  heal: { powerMult: 0.5, aoeMs: 20000 }, // src/raid/BattleSim.ts:249,252
+  cropMutationChance: CROP_MUTATION_CHANCE, // per adjacent mutagen plot; 4 = guaranteed
+  maxAdjacentPlots: 8, // src/zombie/cropMutations.ts (plotsTouch)
   raid: { armyCap: ARMY_CAP, minArmy: MIN_ARMY, cooldownMs: RAID_COOLDOWN_MS, eliteBrainLuck: ELITE_BRAIN_LUCK, brainPityInvasions: BRAIN_PITY_INVASIONS, rareZombiePityWins: RAID_ZOMBIE_PITY_WINS },
   themes: { active: ACTIVE_THEMES, evergreen: EVERGREEN },
 });
