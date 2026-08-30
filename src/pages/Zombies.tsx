@@ -274,7 +274,7 @@ export function ZombieDetail() {
                   </p>
                 )}
                 <p className="mt-2 text-xs text-muted">
-                  Combining resets veterancy to Newbie. See <Link to="/combining">Combining</Link>.
+                  Combining resets veterancy to Newbie. Try the <Link to="/pot-simulator">Pot Simulator</Link>.
                 </p>
               </Panel>
             </Section>
