@@ -21,6 +21,9 @@ export interface ToggleFilter<T> {
   key: string;
   label: string;
   predicate: (row: T) => boolean;
+  /** "keep" (default): when on, show only rows matching the predicate.
+   *  "include": when OFF, hide predicate matches; turning it on adds them back. */
+  mode?: "keep" | "include";
 }
 
 export function DataTable<T>({
@@ -64,7 +67,14 @@ export function DataTable<T>({
         return Array.isArray(g) ? g.includes(v) : g === v;
       });
     }
-    for (const t of toggles) if (tog[t.key]) out = out.filter((r) => t.predicate(r));
+    for (const t of toggles) {
+      const on = tog[t.key];
+      if ((t.mode ?? "keep") === "include") {
+        if (!on) out = out.filter((r) => !t.predicate(r));
+      } else if (on) {
+        out = out.filter((r) => t.predicate(r));
+      }
+    }
 
     if (sort) {
       const col = colByKey[sort.key];
