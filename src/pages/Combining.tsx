@@ -80,9 +80,10 @@ export function CombiningPage() {
           <Section title="Tier-5 Special promotion">
             <p className="mb-2 text-sm text-muted">
               At level {cm.specialLevel}+, an eligible same-group pair has a {Math.round(cm.specialChance * 100)}% roll to promote to
-              its group's Special. Because <span className="font-mono">createCombineRandom</span> is seeded by the sorted parent IDs, the
-              outcome is fixed by which pair you pick and <span className="font-mono">previewCombine</span> shows it - so it's a prize to
-              fish for, not a risk to dodge.
+              its group's Special. The roll is deterministic - <span className="font-mono">createCombineRandom</span> seeds it from the
+              sorted parent IDs, so a given pair always resolves the same way - but the pot only reveals the result <em>after</em> the
+              combine finishes; there is no preview before you commit, and starting consumes both parents. Missing the Special is not a
+              loss, though: you still get slot 1's species with the merged mutations.
             </p>
             <div className="flex flex-wrap gap-2">
               {Object.entries(cm.specialByGroup).map(([group, key]) => {

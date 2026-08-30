@@ -305,7 +305,9 @@ function RecipeView({ r, unit, showCombine }: { r: BuildResult; unit: string; sh
             <p className="mt-1.5 text-sm text-muted">
               <span className="font-medium text-text">{promo.tier} route:</span> combine {promo.from}
               {promo.needsLevel25 && " at level 25+"}
-              {promo.chance != null && ` (${Math.round(promo.chance * 100)}% roll, deterministic per pair - fish with the pot preview)`}.
+              {promo.chance != null &&
+                ` - a ${Math.round(promo.chance * 100)}% roll, fixed for a given pair but only revealed after the combine finishes (no preview before you commit, and starting consumes both parents)`}
+              .
             </p>
           )}
         </div>
