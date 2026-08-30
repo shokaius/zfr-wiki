@@ -12,6 +12,7 @@ export interface Mutation {
   stats: MutationStat;
   tier: number;
   bit: number;
+  icon: string;
   sources: { cropKey: string; cropName: string; level: number | null }[];
   unlockLevel: number | null;
 }

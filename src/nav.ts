@@ -17,7 +17,7 @@ export const NAV: NavGroup[] = [
       { label: "Enemies", to: "/enemies", icon: "FarmStageActorFarmhand.png" },
       { label: "Placeables", to: "/placeables", icon: "fruitTreeApple.png" },
       { label: "Boosts", to: "/boosts", icon: "golden_dice.png" },
-      { label: "Mutations", to: "/mutations", icon: "monolithMutation.png" },
+      { label: "Mutations", to: "/mutations", icon: "icon_mutation_garlic.png" },
       { label: "Abilities", to: "/abilities", icon: "ability_bash.png" },
     ],
   },

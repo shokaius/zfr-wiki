@@ -107,7 +107,8 @@ export function MutationChip({ k }: { k: string }) {
   const m = mutationByKey[k];
   if (!m) return <span className="chip">{k}</span>;
   return (
-    <Link to={`/mutations#${m.key}`} className="chip hover:border-primary hover:text-primary-strong" title={`${m.slot} slot`}>
+    <Link to={`/mutations#${m.key}`} className="chip gap-1 hover:border-primary hover:text-primary-strong" title={`${m.slot} slot`}>
+      <GameIcon file={m.icon} alt="" size="xs" fallback="none" />
       {m.name}
     </Link>
   );

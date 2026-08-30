@@ -169,6 +169,9 @@ const mutationToCrops: Record<string, string[]> = {};
 for (const [cropKey, mutKey] of Object.entries(CROP_MUTATIONS)) {
   (mutationToCrops[mutKey] ||= []).push(cropKey);
 }
+// Square mutation glyphs live in ui/mutation/icon_mutation_<name>.png; a couple
+// of names differ from the mutation key.
+const MUT_ICON_NAME: Record<string, string> = { cauli: "cauliflower", dragon: "dragonfruit" };
 const mutations = MUTATION_LIST.map((m: any) => {
   const cropKeys = mutationToCrops[m.key] ?? [];
   const sources = cropKeys.map((ck) => {
@@ -176,6 +179,8 @@ const mutations = MUTATION_LIST.map((m: any) => {
     return { cropKey: ck, cropName: c?.name ?? ck, level: c?.level ?? null };
   });
   const minLevel = sources.length ? Math.min(...sources.map((s) => s.level ?? Infinity)) : null;
+  const icon = `icon_mutation_${MUT_ICON_NAME[m.key] ?? m.key}.png`;
+  ref(icon);
   return {
     key: m.key,
     name: m.name,
@@ -183,6 +188,7 @@ const mutations = MUTATION_LIST.map((m: any) => {
     stats: m.stats,
     tier: m.tier,
     bit: m.bit,
+    icon,
     sources,
     unlockLevel: Number.isFinite(minLevel) ? minLevel : null,
   };
@@ -856,7 +862,7 @@ for (const f of ["topbar_money_icon.png", "topbar_brain_icon.png", "topbar_exp_i
 for (const f of [
   "stex0006.png", "ZombieActorOldMcZombie.png", "FarmStageActorFarmhand.png", "fruitTreeApple.png",
   "golden_dice.png", "monolithMutation.png", "ability_bash.png", "portrait_pirate.png",
-  "zombieCombiner.png", "Icon_Quest_HarvestZombies.png", "main-icon.png",
+  "zombieCombiner.png", "Icon_Quest_HarvestZombies.png", "main-icon.png", "icon_mutation_garlic.png",
 ]) ref(f);
 
 // Build a basename -> abspath index, walking dirs in priority order (first wins).

@@ -103,7 +103,7 @@ export function searchItems(): SearchItem[] {
       name: m.name,
       subtitle: `${m.slot} · ${Object.entries(m.stats).map(([k, v]) => `+${v} ${k}`).join(", ")}`,
       to: `/mutations#${m.key}`,
-      iconFile: m.sources[0] ? crops.find((c) => c.key === m.sources[0].cropKey)?.icon ?? null : null,
+      iconFile: m.icon,
       keywords: `${m.key} ${m.slot} ${m.sources.map((s) => s.cropName).join(" ")}`,
     });
 

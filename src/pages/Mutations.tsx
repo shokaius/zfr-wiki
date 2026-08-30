@@ -1,5 +1,6 @@
 import { PageHeader, Section, Note, Panel } from "../components/ui/layout";
 import { Badge } from "../components/ui/Badge";
+import { GameIcon } from "../components/ui/GameIcon";
 import { CropChip } from "../components/entities";
 import { SourceCite } from "../components/ui/SourceCite";
 import { mutationsFile, mutations } from "../data";
@@ -40,7 +41,12 @@ export function MutationsPage() {
               <tbody>
                 {items.map((m) => (
                   <tr key={m.key} id={m.key} className="scroll-mt-20">
-                    <td className="font-medium">{m.name}</td>
+                    <td className="font-medium">
+                      <span className="inline-flex items-center gap-2">
+                        <GameIcon file={m.icon} alt="" size="sm" fallback="none" />
+                        {m.name}
+                      </span>
+                    </td>
                     <td className="tabular">
                       {Object.entries(m.stats)
                         .map(([k, v]) => `+${v} ${k}`)
