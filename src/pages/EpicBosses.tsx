@@ -51,8 +51,8 @@ export function EpicBossesIndex() {
     <div>
       <PageHeader title="Epic Bosses" kicker={`${epicBosses.length} bosses`}>
         <p>
-          Time-limited, level-gated events you buy into with brains. Each is a {epicBosses[0]?.maxLevel ?? 10}-rung ladder; the prize is
-          the named Yellow-class quest zombies, which outclass anything you can plant.
+          Time-limited, level-gated events bought with brains. Each is a {epicBosses[0]?.maxLevel ?? 10}-rung ladder that rewards named
+          Yellow-class quest zombies. Cost, unlock level, HP curve, and prize zombies are listed per boss.
         </p>
       </PageHeader>
       <DataTable rows={epicBosses} columns={columns} rowKey={(b) => b.id} initialSort={{ key: "unlock", dir: "asc" }} />

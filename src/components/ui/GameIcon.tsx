@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { iconUrl, genericZombieIcon } from "../../lib/assets";
 
-type Size = "xs" | "sm" | "md" | "lg" | "xl";
-const SIZE_PX: Record<Size, number> = { xs: 16, sm: 20, md: 32, lg: 48, xl: 72 };
+type Size = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+const SIZE_PX: Record<Size, number> = { xs: 16, sm: 20, md: 32, lg: 48, xl: 72, "2xl": 112 };
 
 export function GameIcon({
   file,

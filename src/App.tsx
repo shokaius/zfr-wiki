@@ -5,7 +5,7 @@ import { CropsIndex, CropDetail } from "./pages/Crops";
 import { ZombiesIndex, ZombieDetail } from "./pages/Zombies";
 import { EnemiesIndex, EnemyDetail } from "./pages/Enemies";
 import { PlaceablesIndex, PlaceableDetail } from "./pages/Placeables";
-import { BoostsPage } from "./pages/Boosts";
+import { BoostsPage, BoostDetail } from "./pages/Boosts";
 import { MutationsPage } from "./pages/Mutations";
 import { AbilitiesPage } from "./pages/Abilities";
 import { RaidsIndex, RaidDetail } from "./pages/Raids";
@@ -13,7 +13,7 @@ import { CombatPage } from "./pages/Combat";
 import { CombiningPage } from "./pages/Combining";
 import { EpicBossesIndex, EpicBossDetail } from "./pages/EpicBosses";
 import { QuestsPage } from "./pages/Quests";
-import { EconomyPage } from "./pages/Economy";
+import { LevelingPage } from "./pages/Economy";
 import { ProgressionPage } from "./pages/Progression";
 import { AboutPage } from "./pages/About";
 import { NotFound } from "./pages/NotFound";
@@ -33,6 +33,7 @@ export default function App() {
           <Route path="/placeables" element={<PlaceablesIndex />} />
           <Route path="/placeables/:slug" element={<PlaceableDetail />} />
           <Route path="/boosts" element={<BoostsPage />} />
+          <Route path="/boosts/:slug" element={<BoostDetail />} />
           <Route path="/mutations" element={<MutationsPage />} />
           <Route path="/abilities" element={<AbilitiesPage />} />
           <Route path="/raids" element={<RaidsIndex />} />
@@ -42,7 +43,8 @@ export default function App() {
           <Route path="/epic-bosses" element={<EpicBossesIndex />} />
           <Route path="/epic-bosses/:slug" element={<EpicBossDetail />} />
           <Route path="/quests" element={<QuestsPage />} />
-          <Route path="/economy" element={<EconomyPage />} />
+          <Route path="/leveling" element={<LevelingPage />} />
+          <Route path="/economy" element={<LevelingPage />} />
           <Route path="/progression" element={<ProgressionPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<NotFound />} />

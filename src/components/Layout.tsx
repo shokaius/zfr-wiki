@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { NAV } from "../nav";
 import { ThemeToggle } from "./ThemeToggle";
 import { GAME } from "../lib/gameMeta";
+import { iconUrl } from "../lib/assets";
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   return (
@@ -54,11 +55,10 @@ export function Layout({ children }: { children: ReactNode }) {
               <path d="M3 6h18M3 12h18M3 18h18" />
             </svg>
           </button>
-          <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold !text-text">
-            <span className="grid h-7 w-7 place-items-center rounded bg-primary text-sm text-white">Z</span>
-            <span>
-              ZF2R <span className="text-muted">Wiki</span>
-            </span>
+          <Link to="/" className="flex items-center gap-2" title="Zombie Farm 2 Reforged Wiki">
+            <img src={iconUrl("logo.png") ?? ""} alt="Zombie Farm 2 Reforged" className="h-8 w-auto" />
+            <span className="text-xl leading-none" aria-hidden="true">📖</span>
+            <span className="font-display text-base font-semibold text-muted">Wiki</span>
           </Link>
           <div className="ml-auto flex items-center gap-2">
             <a

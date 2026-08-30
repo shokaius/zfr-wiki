@@ -1,13 +1,13 @@
 import { useParams, Link } from "react-router-dom";
 import { DataTable, type Column } from "../components/ui/DataTable";
-import { GameIcon } from "../components/ui/GameIcon";
+import { ZombieIcon } from "../components/ui/ZombieIcon";
 import { Gold, Brains } from "../components/ui/Currency";
 import { ClassBadge, Badge } from "../components/ui/Badge";
 import { Formula, Fx } from "../components/ui/Formula";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
 import { RaidChip } from "../components/entities";
 import { zombies, zombieSlug, zombieSlugs, combat } from "../data";
-import { num, titleCase, duration } from "../lib/format";
+import { num, titleCase, duration, levelLabel } from "../lib/format";
 import type { Zombie } from "../data/types";
 
 const ACQ_LABEL: Record<string, string> = {
@@ -37,14 +37,14 @@ export function ZombiesIndex() {
       value: (z) => z.name,
       render: (z) => (
         <Link to={`/zombies/${zombieSlug(z)}`} className="inline-flex items-center gap-2 font-medium !text-text hover:!text-primary-strong">
-          <GameIcon file={z.specialSprite} alt="" size="sm" />
+          <ZombieIcon zombie={z} size="sm" />
           {z.name}
         </Link>
       ),
     },
     { key: "class", header: "Class", sortable: true, value: (z) => z.className, render: (z) => <ClassBadge value={z.className} /> },
     { key: "group", header: "Group", sortable: true, value: (z) => z.group },
-    { key: "level", header: "Unlock", sortable: true, align: "right", value: (z) => z.level, render: (z) => `Lv ${z.level}` },
+    { key: "level", header: "Unlock", sortable: true, align: "right", value: (z) => z.level, render: (z) => levelLabel(z.level) },
     { key: "cost", header: "Cost", sortable: true, align: "right", value: (z) => (z.marketHidden ? Infinity : z.cost), render: (z) => <Cost z={z} /> },
     { key: "str", header: "STR", sortable: true, align: "right", value: (z) => z.str },
     { key: "con", header: "CON", sortable: true, align: "right", value: (z) => z.con },
@@ -70,8 +70,7 @@ export function ZombiesIndex() {
       <PageHeader title="Zombies" kicker={`${zombies.length} zombies`}>
         <p>
           Your army. DPS is <span className="font-mono">str × 10 × dex ⁄ 2</span> and HP is <span className="font-mono">con × 100</span>.
-          Below level 8 every zombie fights at its group's floor stats, so early on mutations are the only differentiator — see{" "}
-          <Link to="/combat">Combat</Link>.
+          Below level 8 every zombie fights at its group's floor stats. Zombies without standalone art show a class-coloured monogram.
         </p>
       </PageHeader>
       <DataTable
@@ -103,7 +102,7 @@ export function ZombieDetail() {
       <Breadcrumbs trail={[{ label: "Zombies", to: "/zombies" }, { label: z.name }]} />
       <PageHeader
         title={z.name}
-        icon={<GameIcon file={z.specialSprite} alt={z.name} size="xl" />}
+        icon={<ZombieIcon zombie={z} size="2xl" />}
         kicker={
           <span className="flex items-center gap-2">
             <ClassBadge value={z.className} /> {z.group}
@@ -133,7 +132,7 @@ export function ZombieDetail() {
           </Panel>
           <Panel>
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Details</h2>
-            <KeyRow label="Unlock level">Lv {z.level}</KeyRow>
+            <KeyRow label="Unlock level">{levelLabel(z.level)}</KeyRow>
             <KeyRow label="Cost"><Cost z={z} /></KeyRow>
             <KeyRow label="Grow time">{duration(z.growMs)}</KeyRow>
             <KeyRow label="Tier">{z.tier}</KeyRow>

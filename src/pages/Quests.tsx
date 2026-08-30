@@ -3,13 +3,14 @@ import { Gold, Xp, Brains } from "../components/ui/Currency";
 import { Badge } from "../components/ui/Badge";
 import { PageHeader, Section, Note } from "../components/ui/layout";
 import { questsFile } from "../data";
+import { levelLabel } from "../lib/format";
 import type { Quest } from "../data/types";
 
 function questColumns(): Column<Quest>[] {
   return [
     { key: "id", header: "ID", sortable: true, align: "right", value: (q) => Number(q.id) || q.id },
     { key: "title", header: "Quest", sortable: true, value: (q) => q.title, render: (q) => <span className="font-medium">{q.title}</span> },
-    { key: "level", header: "Level", sortable: true, align: "right", value: (q) => q.levelRequired, render: (q) => `Lv ${q.levelRequired}` },
+    { key: "level", header: "Level", sortable: true, align: "right", value: (q) => q.levelRequired, render: (q) => levelLabel(q.levelRequired) },
     {
       key: "obj",
       header: "Objectives",
@@ -55,9 +56,8 @@ export function QuestsPage() {
     <div>
       <PageHeader title="Quests" kicker={`${questsFile.core.length + questsFile.reforged.length} quests`}>
         <p>
-          Quests are heavily front-loaded XP — the core chain carries you past level 8 on its own, then becomes rounding error. Brain
-          rewards live only on epic-event quests. Two catalogs ship in the data; which the client loads at runtime is unresolved, so both
-          are shown.
+          Quests give XP and occasional gold, item, or zombie rewards. Brain rewards appear only on epic-event quests. Two quest
+          catalogs ship in the data; both are shown below.
         </p>
       </PageHeader>
 

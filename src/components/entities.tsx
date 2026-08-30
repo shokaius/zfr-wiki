@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { GameIcon } from "./ui/GameIcon";
+import { ZombieIcon } from "./ui/ZombieIcon";
 import {
   cropByKey,
   cropSlug,
@@ -14,6 +15,8 @@ import {
   raidSlug,
   epicBossById,
   epicBossSlug,
+  boostByKey,
+  boostSlug,
   mutationByKey,
 } from "../data";
 
@@ -44,7 +47,7 @@ export function ZombieChip({ k }: { k: string }) {
   const z = zombieByKey[k];
   if (!z) return <span className="chip">{k}</span>;
   return (
-    <Chip to={`/zombies/${zombieSlug(z)}`} icon={<GameIcon file={z.specialSprite} alt="" size="xs" />} title={`${z.className} · ${z.group}`}>
+    <Chip to={`/zombies/${zombieSlug(z)}`} icon={<ZombieIcon zombie={z} size="xs" />} title={`${z.className} · ${z.group}`}>
       {z.name}
     </Chip>
   );
@@ -65,7 +68,17 @@ export function EnemyChip({ k }: { k: string }) {
   if (!e) return <span className="chip">{k}</span>;
   return (
     <Chip to={`/enemies/${enemySlug(e)}`} icon={<GameIcon file={e.icon} alt="" size="xs" />}>
-      {e.key}
+      {e.name}
+    </Chip>
+  );
+}
+
+export function BoostChip({ k }: { k: string }) {
+  const b = boostByKey[k];
+  if (!b) return <span className="chip">{k}</span>;
+  return (
+    <Chip to={`/boosts/${boostSlug(b)}`} icon={<GameIcon file={b.icon} alt="" size="xs" fallback="none" />}>
+      {b.name}
     </Chip>
   );
 }

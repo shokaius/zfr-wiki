@@ -12,12 +12,12 @@ export interface RaidSettings {
 export const DEFAULT_SETTINGS: RaidSettings = {
   dice: 0,
   elite: false,
-  useVoucher: false,
+  useVoucher: true,
   sellDecor: true,
   survival: 1,
 };
 
-const KEY = "zfr-raid-settings";
+const KEY = "zfr-raid-settings-v2";
 
 export function useRaidSettings(): [RaidSettings, (patch: Partial<RaidSettings>) => void] {
   const [s, setS] = useState<RaidSettings>(() => {

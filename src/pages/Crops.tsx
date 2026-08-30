@@ -7,7 +7,7 @@ import { Formula, Fx } from "../components/ui/Formula";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
 import { MutationChip } from "../components/entities";
 import { crops, cropSlug, cropSlugs, mutations } from "../data";
-import { num, duration, titleCase } from "../lib/format";
+import { num, duration, titleCase, levelLabel } from "../lib/format";
 import type { Crop } from "../data/types";
 
 const SLOTS = ["head", "hair_eye", "arm", "body", "neck"];
@@ -27,7 +27,7 @@ export function CropsIndex() {
         </Link>
       ),
     },
-    { key: "level", header: "Unlock", sortable: true, align: "right", value: (c) => c.level, render: (c) => <span>Lv {c.level}</span> },
+    { key: "level", header: "Unlock", sortable: true, align: "right", value: (c) => c.level, render: (c) => <span>{levelLabel(c.level)}</span> },
     { key: "cost", header: "Seed", sortable: true, align: "right", value: (c) => c.cost, render: (c) => <Gold value={c.cost} /> },
     { key: "sell", header: "Sell", sortable: true, align: "right", value: (c) => c.sell, render: (c) => <Gold value={c.sell} /> },
     { key: "xp", header: "XP", sortable: true, align: "right", value: (c) => c.xp, render: (c) => <Xp value={c.xp} /> },
@@ -63,8 +63,8 @@ export function CropsIndex() {
     <div>
       <PageHeader title="Crops" kicker={`${crops.length} crops`}>
         <p>
-          Crops are planted, grown, and harvested for gold and XP. Surrounding a zombie plot with a crop at harvest can grant its{" "}
-          <Link to="/mutations">mutation</Link>. Net gold per cycle counts the 10-gold re-plow you pay every cycle.
+          Crops are planted, grown, and harvested for gold and XP. A crop planted next to a zombie plot at harvest can grant its{" "}
+          <Link to="/mutations">mutation</Link>. Net gold per cycle is sell price minus seed cost minus the 10-gold re-plow.
         </p>
       </PageHeader>
       <DataTable
@@ -108,7 +108,7 @@ export function CropDetail() {
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
         <Panel>
           <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Details</h2>
-          <KeyRow label="Unlock level">Lv {crop.level}</KeyRow>
+          <KeyRow label="Unlock level">{levelLabel(crop.level)}</KeyRow>
           <KeyRow label="Seed cost"><Gold value={crop.cost} /></KeyRow>
           <KeyRow label="Sell value"><Gold value={crop.sell} /></KeyRow>
           <KeyRow label="Harvest XP"><Xp value={crop.xp} /></KeyRow>

@@ -102,6 +102,7 @@ export interface Ability {
   label: string;
   effect: string;
   desc: string | null;
+  icon: string | null;
   kind: string | null;
   poolTier: number | null;
   groups: { group: string; tier: number }[];
@@ -188,6 +189,9 @@ export interface QuestsFile {
 
 export interface Enemy {
   key: string;
+  name: string;
+  firstRaid: string | null;
+  firstRaidUnlock: number;
   icon: string;
   str: number;
   con: number;
@@ -314,8 +318,8 @@ export interface EpicBoss {
 }
 
 export interface UpgradesFile {
-  mapSize: { name: string; size: number; level: number; gold: number; brains: number; info: string }[];
-  climate: { name: string; level: number; gold: number; terrain: string }[];
+  mapSize: { name: string; size: number; level: number; gold: number; brains: number; info: string; icon: string | null }[];
+  climate: { name: string; level: number; gold: number; terrain: string; icon: string | null }[];
 }
 
 export interface EconomyFile {

@@ -1,4 +1,5 @@
 import { DataTable, type Column } from "../components/ui/DataTable";
+import { GameIcon } from "../components/ui/GameIcon";
 import { Badge } from "../components/ui/Badge";
 import { PageHeader, Section, Panel, Note } from "../components/ui/layout";
 import { SourceCite } from "../components/ui/SourceCite";
@@ -8,7 +9,18 @@ import type { Ability } from "../data/types";
 
 export function AbilitiesPage() {
   const columns: Column<Ability>[] = [
-    { key: "label", header: "Ability", sortable: true, value: (a) => a.label, render: (a) => <span className="font-medium">{a.label}</span> },
+    {
+      key: "label",
+      header: "Ability",
+      sortable: true,
+      value: (a) => a.label,
+      render: (a) => (
+        <span className="inline-flex items-center gap-2 font-medium">
+          <GameIcon file={a.icon} alt="" size="sm" fallback="none" />
+          {a.label}
+        </span>
+      ),
+    },
     { key: "effect", header: "Effect", value: (a) => a.effect, render: (a) => <span className="text-sm text-muted">{a.effect}</span> },
     { key: "kind", header: "Kind", sortable: true, value: (a) => a.kind ?? "", render: (a) => (a.kind ? <Badge>{titleCase(a.kind)}</Badge> : "—") },
     { key: "tier", header: "Tier", sortable: true, align: "right", value: (a) => a.poolTier ?? 99, render: (a) => (a.poolTier ? `t${a.poolTier}` : "—") },
@@ -35,8 +47,8 @@ export function AbilitiesPage() {
     <div>
       <PageHeader title="Abilities" kicker={`${abilities.length} abilities`}>
         <p>
-          Combat abilities granted by a zombie's group at four tiers. A tier is usable only when its class carries it <em>and</em> its
-          boss has been beaten globally ({Object.values(abilitiesFile.tierBoss).join(", ")}).
+          Combat abilities are granted by a zombie's group across four tiers. A tier is usable when the zombie's class carries it and its
+          boss has been beaten ({Object.values(abilitiesFile.tierBoss).join(", ")}).
         </p>
       </PageHeader>
 

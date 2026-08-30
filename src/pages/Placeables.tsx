@@ -5,7 +5,7 @@ import { Gold, Brains, Xp } from "../components/ui/Currency";
 import { Badge, SeasonalBadge, UnavailableBadge } from "../components/ui/Badge";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
 import { placeables, placeableSlug, placeableSlugs, economy } from "../data";
-import { num, duration, titleCase } from "../lib/format";
+import { num, duration, titleCase, levelLabel } from "../lib/format";
 import type { Placeable } from "../data/types";
 
 const CATS = ["functional", "tree", "decor", "reward"];
@@ -30,7 +30,7 @@ export function PlaceablesIndex() {
       ),
     },
     { key: "category", header: "Type", sortable: true, value: (p) => p.category, render: (p) => <Badge>{titleCase(p.category)}</Badge> },
-    { key: "level", header: "Unlock", sortable: true, align: "right", value: (p) => p.level, render: (p) => `Lv ${p.level}` },
+    { key: "level", header: "Unlock", sortable: true, align: "right", value: (p) => p.level, render: (p) => levelLabel(p.level) },
     { key: "cost", header: "Cost", sortable: true, align: "right", value: (p) => p.cost, render: (p) => <PriceCell p={p} /> },
     { key: "xp", header: "XP", sortable: true, align: "right", value: (p) => p.xp, render: (p) => <Xp value={p.xp} /> },
     { key: "sell", header: "Sell", sortable: true, align: "right", value: (p) => p.sellValue, render: (p) => <Gold value={p.sellValue} /> },
@@ -48,12 +48,12 @@ export function PlaceablesIndex() {
     <div>
       <PageHeader title="Placeables" kicker={`${placeables.length} objects`}>
         <p>
-          Decor, functional buildings (monoliths, graves, pot, storage), and fruit trees. Seasonal items are gated behind{" "}
-          <span className="font-mono">ACTIVE_THEMES</span> (currently only <em>evergreen</em>), so many are unavailable now.
+          Decor, functional buildings (monoliths, graves, the pot, storage), and fruit trees. Seasonal items are gated behind the{" "}
+          <span className="font-mono">ACTIVE_THEMES</span> list (currently only <em>evergreen</em>); unavailable items sort to the bottom.
         </p>
       </PageHeader>
       <DataTable
-        rows={placeables}
+        rows={[...placeables].sort((a, b) => Number(b.available) - Number(a.available) || a.level - b.level)}
         columns={columns}
         rowKey={(p) => p.key}
         search={(p) => `${p.name} ${p.category} ${p.effect ?? ""}`}
@@ -64,7 +64,6 @@ export function PlaceablesIndex() {
           { key: "brains", label: "Brains only", predicate: (p) => p.brainsNeeded },
           { key: "fn", label: "Functional", predicate: (p) => p.category === "functional" || p.armyMax > 0 || p.zombieSlots > 0 || p.storageSlots > 0 },
         ]}
-        initialSort={{ key: "level", dir: "asc" }}
       />
     </div>
   );
@@ -93,7 +92,7 @@ export function PlaceableDetail() {
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
         <Panel>
           <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Details</h2>
-          <KeyRow label="Unlock level">Lv {p.level}</KeyRow>
+          <KeyRow label="Unlock level">{levelLabel(p.level)}</KeyRow>
           <KeyRow label="Cost"><PriceCell p={p} /></KeyRow>
           <KeyRow label="XP on purchase"><Xp value={p.xp} /></KeyRow>
           <KeyRow label="Sell value"><Gold value={p.sellValue} /></KeyRow>

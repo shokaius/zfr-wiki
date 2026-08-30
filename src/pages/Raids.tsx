@@ -6,11 +6,11 @@ import { Gold, Brains, Xp } from "../components/ui/Currency";
 import { Badge } from "../components/ui/Badge";
 import { Formula, Fx } from "../components/ui/Formula";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
-import { ZombieChip, EnemyChip, PlaceableChip } from "../components/entities";
+import { ZombieChip, EnemyChip, PlaceableChip, BoostChip } from "../components/entities";
 import { RaidToggleBar } from "../components/RaidToggleBar";
 import { useRaidSettings, computeRaidEv, type ComputedRaidEv } from "../lib/raidEv";
 import { raids, raidSlug, raidBySlug } from "../data";
-import { num, duration, pct } from "../lib/format";
+import { num, duration, pct, levelLabel } from "../lib/format";
 import type { Raid } from "../data/types";
 
 interface Row {
@@ -32,11 +32,10 @@ export function RaidsIndex() {
         <Link to={`/raids/${raidSlug(raid)}`} className="inline-flex items-center gap-2 font-medium !text-text hover:!text-primary-strong">
           <GameIcon file={raid.enemyIcon} alt="" size="sm" fallback="none" />
           {raid.name}
-          {raid.seasonal && <Badge>seasonal</Badge>}
         </Link>
       ),
     },
-    { key: "unlock", header: "Unlock", sortable: true, align: "right", value: (r) => r.raid.unlockLevel, render: (r) => `Lv ${r.raid.unlockLevel}` },
+    { key: "unlock", header: "Unlock", sortable: true, align: "right", value: (r) => r.raid.unlockLevel, render: (r) => levelLabel(r.raid.unlockLevel) },
     { key: "win", header: "Win gold", sortable: true, align: "right", hint: "(goldReward + bonusGold) × survival", value: (r) => r.ev.winGold, render: (r) => <Gold value={r.ev.winGold} /> },
     {
       key: "net",
@@ -70,17 +69,14 @@ export function RaidsIndex() {
           <span className="text-muted">—</span>
         ),
     },
-    { key: "stages", header: "Stages", align: "right", value: (r) => r.raid.stageCount },
-    { key: "army", header: "Min army", align: "right", hint: "eased for early McDonnell", value: (r) => r.raid.minArmyProgression[2], render: (r) => r.raid.minArmyProgression.join(" → ") },
   ];
 
   return (
     <div>
       <PageHeader title="Raids" kicker={`${raids.length} raids`}>
         <p>
-          Invasions pay gold, brains, boosts, and a rare zombie — but XP only on the first clear. Every number below is driven by the
-          toggle bar; flip a switch instead of reading a verdict. Combat resolution (the battle sim) is deferred; these are expected
-          values.
+          Invasions reward gold, brains, boosts, and — on four of them — a rare zombie. XP is paid only on the first clear. The gold,
+          brains, and rare-zombie columns are expected values computed from the assumptions in the toggle bar below.
         </p>
       </PageHeader>
 
@@ -131,7 +127,7 @@ export function RaidDetail() {
           </Panel>
           <Panel>
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">Fixed</h2>
-            <KeyRow label="Unlock level">Lv {raid.unlockLevel}</KeyRow>
+            <KeyRow label="Unlock level">{levelLabel(raid.unlockLevel)}</KeyRow>
             <KeyRow label="Recommended">Lv {raid.recommendedLevel}</KeyRow>
             <KeyRow label="First-clear XP"><Xp value={raid.xp} /></KeyRow>
             <KeyRow label="First-clear brains"><Brains value={raid.firstClearBrains} /></KeyRow>
@@ -172,7 +168,7 @@ export function RaidDetail() {
                             </td>
                           )}
                           <td>
-                            {it.placeKey ? <PlaceableChip k={it.placeKey} /> : it.name}
+                            {it.placeKey ? <PlaceableChip k={it.placeKey} /> : it.boostKey ? <BoostChip k={it.boostKey} /> : it.name}
                             {it.boostQty && it.boostQty > 1 ? <span className="ml-1 text-xs text-muted">×{it.boostQty}</span> : null}
                           </td>
                           <td><Badge>{KIND_LABEL[it.kind] ?? it.kind}</Badge></td>

@@ -83,11 +83,13 @@ export const zombieSlugs = slugMap(zombies, (z) => z.name);
 export const placeableSlugs = slugMap(placeables, (p) => p.key);
 export const enemySlugs = slugMap(enemies, (e) => e.key);
 export const epicBossSlugs = slugMap(epicBosses, (b) => b.id);
+export const boostSlugs = slugMap(boosts, (b) => b.key);
 
 export const cropSlug = (c: Crop) => cropSlugs.toSlug.get(c)!;
 export const zombieSlug = (z: Zombie) => zombieSlugs.toSlug.get(z)!;
 export const placeableSlug = (p: Placeable) => placeableSlugs.toSlug.get(p)!;
 export const enemySlug = (e: Enemy) => enemySlugs.toSlug.get(e)!;
 export const epicBossSlug = (b: EpicBoss) => epicBossSlugs.toSlug.get(b)!;
+export const boostSlug = (b: Boost) => boostSlugs.toSlug.get(b)!;
 export const raidSlug = (r: Raid) => slugify(r.name);
 export const raidBySlug = Object.fromEntries(raids.map((r) => [slugify(r.name), r])) as Record<string, Raid>;

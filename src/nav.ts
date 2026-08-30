@@ -25,7 +25,6 @@ export const NAV: NavGroup[] = [
     title: "Systems",
     items: [
       { label: "Raids", to: "/raids", icon: "⚔" },
-      { label: "Combat", to: "/combat", icon: "🎯" },
       { label: "Combining", to: "/combining", icon: "⚗" },
       { label: "Epic Bosses", to: "/epic-bosses", icon: "👑" },
       { label: "Quests", to: "/quests", icon: "📜" },
@@ -34,8 +33,8 @@ export const NAV: NavGroup[] = [
   {
     title: "Reference",
     items: [
-      { label: "Economy", to: "/economy", icon: "💰" },
-      { label: "Progression", to: "/progression", icon: "📈" },
+      { label: "Leveling", to: "/leveling", icon: "📈" },
+      { label: "Progression", to: "/progression", icon: "🗺" },
       { label: "Sources", to: "/about", icon: "❋" },
     ],
   },

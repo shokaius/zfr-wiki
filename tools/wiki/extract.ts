@@ -136,6 +136,24 @@ const referenced = new Set<string>();
 const ref = (f: string | null | undefined) => {
   if (f && typeof f === "string" && f.trim()) referenced.add(f.trim());
 };
+// Explicit src->dest copies for files whose basename collides in the flat store
+// (e.g. every epic boss ships portrait.png in its own dir).
+const explicitCopies = new Map<string, string>(); // destName -> absolute src path
+const iconBase = (p: string | null | undefined) => {
+  if (!p) return null;
+  const s = String(p).trim();
+  const i = s.lastIndexOf("/");
+  return i >= 0 ? s.slice(i + 1) : s;
+};
+// Enemy keys like "PirateStageActorScallywag" -> "Pirate Scallywag".
+function cleanEnemyName(key: string): string {
+  return key
+    .replace(/StageActor|Stage|Actor/g, " ")
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/([a-zA-Z])(\d+)$/, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
 // DERIVED SIGNPOSTS ----------------------------------------------------------
 const DPS = (str: number, dex: number) => str * POWER_PER_STR * (dex / ATTACK_INTERVAL_SEC.player);
@@ -329,11 +347,14 @@ const abilities = Object.entries(ABILITY_POOL as Record<string, any>).map(([key,
       break;
     }
   }
+  const icon = iconBase(meta.icon);
+  ref(icon);
   return {
     key,
     label: meta.label,
     effect: meta.effect,
     desc: meta.desc ?? null,
+    icon,
     kind: (ABILITY_KIND as any)[key] ?? null,
     poolTier,
     groups: abilityGroups[key] ?? [],
@@ -457,6 +478,7 @@ writeJson("quests", { core: coreQuests, reforged: reforgedQuests });
 // ===========================================================================
 const attacksByName = attacks;
 const enemyUsedIn: Record<string, string[]> = {};
+const enemyFirstRaid: Record<string, { name: string; unlock: number }> = {};
 for (const raid of raidsRaw) {
   const names = new Set<string>();
   for (const st of raid.stages ?? []) {
@@ -465,7 +487,11 @@ for (const raid of raidsRaw) {
     for (const w of st.weighted ?? []) if (w.enemy) names.add(w.enemy);
   }
   for (const k of raid.obstacleActors ?? []) names.add(k);
-  for (const n of names) (enemyUsedIn[n] ||= []).push(raid.name);
+  for (const n of names) {
+    (enemyUsedIn[n] ||= []).push(raid.name);
+    const cur = enemyFirstRaid[n];
+    if (!cur || raid.unlockLevel < cur.unlock) enemyFirstRaid[n] = { name: raid.name, unlock: raid.unlockLevel };
+  }
 }
 const enemies = Object.entries(enemyStats).map(([key, valWrap]: [string, any]) => {
   const v = valWrap.value ?? valWrap;
@@ -473,6 +499,9 @@ const enemies = Object.entries(enemyStats).map(([key, valWrap]: [string, any]) =
   ref(iconFile);
   return {
     key,
+    name: cleanEnemyName(key),
+    firstRaid: enemyFirstRaid[key]?.name ?? null,
+    firstRaidUnlock: enemyFirstRaid[key]?.unlock ?? 999,
     icon: iconFile,
     str: v.str,
     con: v.con,
@@ -697,10 +726,18 @@ writeJson("raids", raids);
 // EPIC BOSSES
 // ===========================================================================
 const questZombieByQuestId = EPIC_QUEST_ZOMBIE_REWARDS as Record<string, string>;
+// Epic icons share basenames across boss dirs, so copy them under unique names.
+const epicIcon = (id: string, file: string | null | undefined): string | null => {
+  const base = iconBase(file);
+  if (!base) return null;
+  const dest = `epic_${id}_${base}`;
+  explicitCopies.set(dest, join(ASSETS, "epic-bosses", id, base));
+  return dest;
+};
 const epicBosses = (EPIC_BOSSES as any[]).map((def) => {
-  ref(def.portrait);
-  ref(def.questIcon);
-  ref(def.lootIcon);
+  const portrait = epicIcon(def.id, def.portrait);
+  const questIcon = epicIcon(def.id, def.questIcon);
+  const lootIcon = epicIcon(def.id, def.lootIcon);
   const unlockLevel = (EPIC_BOSS_UNLOCK_LEVELS as any)[def.id] ?? null;
   const hpCurve = Array.from({ length: def.maxLevel }, (_, i) => ({ level: i + 1, hp: epicBossHp(def, i + 1) }));
   const questZombies = (def.questIds ?? [])
@@ -730,9 +767,9 @@ const epicBosses = (EPIC_BOSSES as any[]).map((def) => {
     questZombies,
     loot,
     favoriteCrop: favCropKey ? { key: favCropKey, name: cropByKey[favCropKey]?.name ?? favCropKey } : null,
-    portrait: def.portrait,
-    questIcon: def.questIcon,
-    lootIcon: def.lootIcon,
+    portrait,
+    questIcon,
+    lootIcon,
     fightBrainCost: EPIC_BOSS_FIGHT_BRAIN_COST,
   };
 });
@@ -742,8 +779,14 @@ writeJson("epic-bosses", epicBosses);
 // UPGRADES (farm size + climate)
 // ===========================================================================
 writeJson("upgrades", {
-  mapSize: (upgrades.mapSize ?? []).map((u: any) => ({ name: u.name, size: u.size, level: u.level, gold: u.gold, brains: u.brains, info: u.info })),
-  climate: (upgrades.climate ?? []).map((u: any) => ({ name: u.name, level: u.level, gold: u.gold, terrain: u.terrain })),
+  mapSize: (upgrades.mapSize ?? []).map((u: any) => {
+    ref(u.icon);
+    return { name: u.name, size: u.size, level: u.level, gold: u.gold, brains: u.brains, info: u.info, icon: iconBase(u.icon) };
+  }),
+  climate: (upgrades.climate ?? []).map((u: any) => {
+    ref(u.icon);
+    return { name: u.name, level: u.level, gold: u.gold, terrain: u.terrain, icon: iconBase(u.icon) };
+  }),
 });
 
 // ===========================================================================
@@ -802,8 +845,8 @@ writeJson("combat", {
 // ===========================================================================
 // ASSET COPY  (only referenced files, flattened into game-assets/all)
 // ===========================================================================
-// Always-copy HUD icons (currencies + generic fallbacks).
-for (const f of ["topbar_money_icon.png", "topbar_brain_icon.png", "topbar_exp_icon.png", "topbar_level_icon.png", "topbar_zombie_icon.png"]) ref(f);
+// Always-copy HUD icons (currencies + generic fallbacks) + the game logo.
+for (const f of ["topbar_money_icon.png", "topbar_brain_icon.png", "topbar_exp_icon.png", "topbar_level_icon.png", "topbar_zombie_icon.png", "logo.png"]) ref(f);
 
 // Build a basename -> abspath index, walking dirs in priority order (first wins).
 const SCAN_ORDER = ["ui", "crop-icons", "boosts", "objects", "zombie", "crops", "raids/images", "raids/enemies", "raids/loot", "raids", "epic-bosses", "player", "pets", "scenery", "ground", "title", "tutorial"];
@@ -844,6 +887,15 @@ for (const file of referenced) {
   }
   copyFileSync(src, join(ASSET_OUT, basename(file)));
   copied++;
+}
+// Namespaced copies (epic-boss icons) that would otherwise collide by basename.
+for (const [dest, src] of explicitCopies) {
+  try {
+    copyFileSync(src, join(ASSET_OUT, dest));
+    copied++;
+  } catch {
+    missing.push(dest);
+  }
 }
 
 // ===========================================================================

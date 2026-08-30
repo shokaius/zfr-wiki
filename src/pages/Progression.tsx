@@ -4,6 +4,7 @@ import { GameIcon } from "../components/ui/GameIcon";
 import { Gold, Brains } from "../components/ui/Currency";
 import { Badge } from "../components/ui/Badge";
 import { PageHeader, Section, Note } from "../components/ui/layout";
+import { levelLabel } from "../lib/format";
 import { crops, cropSlug, zombies, zombieSlug, raids, raidSlug, placeables, placeableSlug, epicBosses, epicBossSlug, upgrades } from "../data";
 
 interface Unlock {
@@ -24,7 +25,7 @@ function buildUnlocks(): Unlock[] {
   for (const r of raids) out.push({ id: `raid-${r.id}`, level: r.unlockLevel, type: "Raid", name: r.name, to: `/raids/${raidSlug(r)}`, icon: r.enemyIcon, fallback: "none", detail: `${r.winGoldFull}g / win` });
   for (const p of placeables) if ((p.category === "functional" || p.category === "tree") && p.level >= 1) out.push({ id: `p-${p.key}`, level: p.level, type: "Placeable", name: p.name, to: `/placeables/${placeableSlug(p)}`, icon: p.sprite, fallback: "none", detail: p.effect ?? p.category });
   for (const b of epicBosses) if (b.unlockLevel) out.push({ id: `eb-${b.id}`, level: b.unlockLevel, type: "Epic Boss", name: b.name, to: `/epic-bosses/${epicBossSlug(b)}`, icon: b.questIcon, fallback: "none", detail: `${b.costBrains} brains entry` });
-  for (const u of upgrades.mapSize) out.push({ id: `farm-${u.size}`, level: u.level, type: "Farm size", name: u.name, to: "/progression", icon: null, fallback: "none", detail: u.info });
+  for (const u of upgrades.mapSize) out.push({ id: `farm-${u.size}`, level: u.level, type: "Farm size", name: u.name, to: "/progression", icon: u.icon, fallback: "none", detail: u.info });
   return out.sort((a, b) => a.level - b.level);
 }
 
@@ -33,7 +34,7 @@ export function ProgressionPage() {
   const types = [...new Set(unlocks.map((u) => u.type))];
 
   const columns: Column<Unlock>[] = [
-    { key: "level", header: "Level", sortable: true, align: "right", value: (u) => u.level, render: (u) => <span className="font-semibold tabular">Lv {u.level}</span> },
+    { key: "level", header: "Level", sortable: true, align: "right", value: (u) => u.level, render: (u) => <span className="font-semibold tabular">{levelLabel(u.level)}</span> },
     { key: "type", header: "Type", sortable: true, value: (u) => u.type, render: (u) => <Badge>{u.type}</Badge> },
     {
       key: "name",
@@ -42,7 +43,10 @@ export function ProgressionPage() {
       value: (u) => u.name,
       render: (u) =>
         u.to === "/progression" ? (
-          <span className="inline-flex items-center gap-2 font-medium">{u.name}</span>
+          <span className="inline-flex items-center gap-2 font-medium">
+            <GameIcon file={u.icon} alt="" size="sm" fallback={u.fallback} />
+            {u.name}
+          </span>
         ) : (
           <Link to={u.to} className="inline-flex items-center gap-2 font-medium !text-text hover:!text-primary-strong">
             <GameIcon file={u.icon} alt="" size="sm" fallback={u.fallback} />
@@ -56,7 +60,7 @@ export function ProgressionPage() {
   return (
     <div>
       <PageHeader title="Progression" kicker="what opens at each level">
-        <p>Everything gated by level, in one sortable list. This is the "what should I be doing at level N" view — sort by level, filter by type. No opinions, just what unlocks.</p>
+        <p>Everything gated by level, in one sortable list. Sort by level or filter by type to see what unlocks when.</p>
       </PageHeader>
 
       <Section title="Unlock timeline">
@@ -93,7 +97,12 @@ export function ProgressionPage() {
               </tr>
               {upgrades.mapSize.map((u) => (
                 <tr key={u.size}>
-                  <td className="font-medium">{u.name}</td>
+                  <td className="font-medium">
+                    <span className="inline-flex items-center gap-2">
+                      <GameIcon file={u.icon} alt="" size="sm" fallback="none" />
+                      {u.name}
+                    </span>
+                  </td>
                   <td className="text-right tabular">{u.size}×{u.size}</td>
                   <td className="text-right tabular">Lv {u.level}</td>
                   <td className="text-right"><Gold value={u.gold} /></td>

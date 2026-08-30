@@ -32,6 +32,12 @@ export function duration(ms: number | null | undefined): string {
   return Number.isInteger(d) ? `${d}d` : `${d.toFixed(1)}d`;
 }
 
+/** Unlock-level label; anything at or below 0 is "pre-unlocked" and shows a dash. */
+export function levelLabel(n: number | null | undefined): string {
+  if (n === null || n === undefined || n <= 0) return "—";
+  return `Lv ${n}`;
+}
+
 export function slugify(s: string): string {
   return s
     .toLowerCase()
