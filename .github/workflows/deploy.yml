@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
+      - run: sudo apt-get update && sudo apt-get install -y imagemagick # extractor trims zombie portraits
       - run: npm ci
       - run: npm run build # prebuild runs the extractor (imports game/src, reads assets, copies icons)
       - uses: actions/upload-pages-artifact@v3

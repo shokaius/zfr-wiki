@@ -915,6 +915,17 @@ for (const [dest, src] of explicitCopies) {
   }
 }
 
+// Zombie portraits sit in a 160x180 canvas with ~50% transparent padding, so
+// they render small in every frame. Trim the padding (best-effort — needs
+// ImageMagick, which the GitHub Pages runner has) and add a thin even margin.
+let trimmed = false;
+try {
+  execSync("mogrify -trim +repage -background none -bordercolor none -border 6 'ZombieActor*.png'", { cwd: ASSET_OUT, stdio: "ignore" });
+  trimmed = true;
+} catch {
+  /* ImageMagick unavailable; portraits stay padded but still work */
+}
+
 // ===========================================================================
 // META
 // ===========================================================================
@@ -950,4 +961,5 @@ writeJson("meta", {
 
 console.log(`[extract] wrote generated JSON to src/data/generated`);
 console.log(`[extract] copied ${copied} icons -> public/game-assets/all (${missing.length} missing)`);
+console.log(`[extract] zombie portraits ${trimmed ? "trimmed (ImageMagick)" : "NOT trimmed (ImageMagick missing)"}`);
 if (missing.length) console.log(`[extract] missing (first 25): ${missing.slice(0, 25).join(", ")}`);
