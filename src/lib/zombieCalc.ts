@@ -12,7 +12,7 @@
 //     imprint, and 8 plots/grow => at most 2 guaranteed mutations per grow. The
 //     Zombie Pot unions two masks per slot (higher tier wins), keeping the slot-1
 //     species, so combining stacks grows up to the per-slot cap.
-import { zombies, mutations, combat } from "../data";
+import { zombies, mutations, combat, raidById } from "../data";
 import type { Zombie, Mutation } from "../data/types";
 
 export type OptimizeKind = "con" | "dps" | "heal";
@@ -177,6 +177,13 @@ function included(z: Zombie, s: CalcSettings): boolean {
   return s.includeEvent; // event
 }
 
+/** Level a zombie first becomes obtainable. A raid drop follows its raid's unlock
+ *  level (the zombie's own level field is a sentinel); everything else uses its own. */
+function unlockLevelOf(z: Zombie): number {
+  if (z.dropRaid) return raidById[String(z.dropRaid.raidId)]?.unlockLevel ?? z.level;
+  return z.level;
+}
+
 // ---- combine-promotion recipe (silver/special) ---------------------------
 export interface Promotion {
   tier: string; // "Blue" | "Red" | "Silver" | "Special"
@@ -266,7 +273,7 @@ export function computeBuilds(s: CalcSettings): BuildResult[] {
     if (s.optimize === "heal" && z.group !== HEAL_GROUP) return false;
     // Unlock gate: market zombies carry a real unlock level; specials/event
     // zombies carry a sentinel (<=0) and pass, governed by their source toggle.
-    if (z.level > s.level) return false;
+    if (unlockLevelOf(z) > s.level) return false;
     return included(z, s);
   });
 
