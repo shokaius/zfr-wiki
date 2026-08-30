@@ -39,7 +39,7 @@ export const NAV: NavGroup[] = [
   {
     title: "Tools",
     items: [
-      { label: "Calculator", to: "/calculator", icon: "monolithMutation.png" },
+      { label: "Calculator", to: "/calculator", icon: "ability_buffAllStats.png" },
       { label: "Pot Simulator", to: "/pot-simulator", icon: "zombieCombiner.png" },
     ],
   },
