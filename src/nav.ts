@@ -32,14 +32,16 @@ export const NAV: NavGroup[] = [
     title: "Systems",
     items: [
       { label: "Raids", to: "/raids", icon: "portrait_pirate.png" },
-      { label: "Combining", to: "/combining", icon: "zombieCombiner.png" },
       { label: "Epic Bosses", to: "/epic-bosses", icon: "epic_dr-groundhog_portrait.png" },
       { label: "Quests", to: "/quests", icon: "Icon_Quest_HarvestZombies.png" },
     ],
   },
   {
     title: "Tools",
-    items: [{ label: "Calculator", to: "/calculator", icon: "monolithMutation.png" }],
+    items: [
+      { label: "Calculator", to: "/calculator", icon: "monolithMutation.png" },
+      { label: "Pot Simulator", to: "/pot-simulator", icon: "zombieCombiner.png" },
+    ],
   },
   {
     title: "Reference",
