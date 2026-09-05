@@ -86,6 +86,14 @@ import { EPIC_BOSSES, EPIC_BOSS_UNLOCK_LEVELS, epicBossHp } from "../../game/src
 import { EPIC_QUEST_ZOMBIE_REWARDS } from "../../game/src/epicBoss/rewards";
 import { EPIC_BOSS_FIGHT_BRAIN_COST } from "../../game/src/epicBoss/tokens";
 import { EPIC_BOSS_FAVORITE_CROPS } from "../../game/src/epicBoss/favoriteCrops";
+import { FREE_DAILY_GIFTS, GIFT_GOLD_COST, GIFT_XP_REWARD, MAX_FRIENDS } from "../../game/src/net/protocol";
+// The gift reward roll is server-owned (the client never learns the contents until
+// the gift is opened), so these come from the worker's pure-logic module.
+import {
+  GIFT_REWARD_TABLE,
+  GIFT_REWARD_TOTAL_WEIGHT,
+  FIRST_DAILY_GIFT_REWARD,
+} from "../../game/server/src/logic";
 
 // ---- Paths -----------------------------------------------------------------
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -96,6 +104,11 @@ const OUT = join(ROOT, "src/data/generated");
 const ASSET_OUT = join(ROOT, "public/game-assets/all");
 
 const PLOW_COST = 10; // src/JobSystem.ts:28 (module-private const)
+// src/zombie/ZombieField.ts:34 (module-private const). Per-combat-tier chance that a
+// DEPLOYED Garden zombie fertilizes a freshly planted veggie crop. Tier 3 and 4 share
+// a rate; non-Garden groups never roll at all.
+const FERTILIZE_BY_TIER: Record<number, number> = { 1: 0.04, 2: 0.06, 3: 0.08, 4: 0.08, 5: 0.12 };
+const MAX_INBOX = 200; // server/src/index.ts:82 (module-private const)
 
 // ---- Small utils -----------------------------------------------------------
 const readJson = (p: string): any => JSON.parse(readFileSync(join(ASSETS, p), "utf8"));
@@ -329,6 +342,9 @@ const zombies = zombiesRaw.map((z) => {
     isDecayer,
     mutatableSlots: isHeadless ? SLOTS.filter((s: string) => s !== "head" && s !== "hair_eye") : SLOTS,
     acquisition,
+    // Garden zombies only: chance this one fertilizes a newly planted veggie crop.
+    // Keyed off combat tier exactly as the game does; null = never fertilizes.
+    fertilizeChance: group === "Garden" ? FERTILIZE_BY_TIER[z.tier] ?? null : null,
     scaling,
     veterancy: vet,
     abilities,
@@ -860,6 +876,39 @@ writeJson("combat", {
 });
 
 // ===========================================================================
+// SOCIAL  (friend gifting)
+// ===========================================================================
+// A gift's contents are rolled ONCE by the server when it is SENT and stored on the
+// row — opening never re-rolls. The weights sum to 100, so each weight is already a
+// percentage, but derive the share anyway so this stays correct if they ever change.
+const giftRewards = GIFT_REWARD_TABLE.map((entry) => ({
+  kind: entry.reward.kind,
+  amount: entry.reward.amount,
+  weight: entry.weight,
+  chance: round(entry.weight / GIFT_REWARD_TOTAL_WEIGHT, 5),
+}));
+const giftGoldEv = giftRewards
+  .filter((r) => r.kind === "gold")
+  .reduce((sum, r) => sum + r.chance * r.amount, 0);
+const giftBrainChance = giftRewards
+  .filter((r) => r.kind === "brain")
+  .reduce((sum, r) => sum + r.chance, 0);
+writeJson("social", {
+  gift: {
+    freeDaily: FREE_DAILY_GIFTS,
+    goldCost: GIFT_GOLD_COST,
+    xpReward: GIFT_XP_REWARD,
+    maxFriends: MAX_FRIENDS,
+    maxInbox: MAX_INBOX,
+    totalWeight: GIFT_REWARD_TOTAL_WEIGHT,
+    rewards: giftRewards,
+    firstDaily: { kind: FIRST_DAILY_GIFT_REWARD.kind, amount: FIRST_DAILY_GIFT_REWARD.amount },
+    evGold: round(giftGoldEv, 2),
+    brainChance: round(giftBrainChance, 5),
+  },
+});
+
+// ===========================================================================
 // ASSET COPY  (only referenced files, flattened into game-assets/all)
 // ===========================================================================
 // Always-copy HUD icons (currencies + generic fallbacks) + the game logo.
@@ -869,6 +918,7 @@ for (const f of [
   "stex0006.png", "ZombieActorOldMcZombie.png", "FarmStageActorBoss.png", "fruitTreeApple.png",
   "golden_dice.png", "ability_buffAllStats.png", "ability_bash.png", "portrait_pirate.png",
   "zombieCombiner.png", "Icon_Quest_HarvestZombies.png", "main-icon.png", "icon_mutation_garlic.png",
+  "zombieGift.png",
 ]) ref(f);
 
 // Build a basename -> abspath index, walking dirs in priority order (first wins).

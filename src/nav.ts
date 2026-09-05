@@ -2,6 +2,7 @@ export interface NavItem {
   label: string;
   to: string;
   icon: string; // game-asset filename (resolved via iconUrl)
+  keywords?: string; // extra terms for quick lookup, beyond the label
   iconClass?: string; // optional per-icon tweak (e.g. scale) applied to the img
 }
 export interface NavGroup {
@@ -34,6 +35,7 @@ export const NAV: NavGroup[] = [
       { label: "Raids", to: "/raids", icon: "portrait_pirate.png" },
       { label: "Epic Bosses", to: "/epic-bosses", icon: "epic_dr-groundhog_portrait.png" },
       { label: "Quests", to: "/quests", icon: "Icon_Quest_HarvestZombies.png" },
+      { label: "Gifting", to: "/gifting", icon: "zombieGift.png", keywords: "friends gift chance odds brains" },
     ],
   },
   {

@@ -60,7 +60,7 @@ export function searchItems(): SearchItem[] {
       iconFile: z.portrait,
       iconFallback: z.specialSprite,
       iconKind: "zombie",
-      keywords: `${z.key} ${z.className} ${z.group} ${z.acquisition.join(" ")}`,
+      keywords: `${z.key} ${z.className} ${z.group} ${z.acquisition.join(" ")}${z.fertilizeChance !== null ? " fertilize fertilizer fertilization" : ""}`,
     });
 
   for (const e of enemies)
@@ -143,7 +143,7 @@ export function searchItems(): SearchItem[] {
   // Top-level pages.
   for (const group of NAV)
     for (const item of group.items)
-      out.push({ id: `pg-${item.to}`, type: "Page", name: item.label, subtitle: "Go to page", to: item.to, iconFile: item.icon, keywords: group.title });
+      out.push({ id: `pg-${item.to}`, type: "Page", name: item.label, subtitle: "Go to page", to: item.to, iconFile: item.icon, keywords: `${group.title} ${item.keywords ?? ""}` });
 
   cache = out;
   return out;

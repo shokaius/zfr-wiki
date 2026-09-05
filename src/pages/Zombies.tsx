@@ -7,9 +7,19 @@ import { Formula, Fx } from "../components/ui/Formula";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
 import { RaidChip } from "../components/entities";
 import { PageIcon } from "../components/PageIcon";
+import { SourceCite } from "../components/ui/SourceCite";
 import { zombies, zombieSlug, zombieSlugs, combat } from "../data";
-import { num, titleCase, duration, levelLabel } from "../lib/format";
+import { num, pct, titleCase, duration, levelLabel } from "../lib/format";
 import type { Zombie } from "../data/types";
+
+/** Every zombie that can fertilize, best rate first — the comparison shown on a
+ *  Garden zombie's page so its rate reads against the alternatives. */
+const GARDEN_ZOMBIES = zombies
+  .filter((z) => z.fertilizeChance !== null)
+  .sort((a, b) => (b.fertilizeChance ?? 0) - (a.fertilizeChance ?? 0) || a.level - b.level);
+
+/** Deployed-copy counts used for the "at least one hit" stacking table. */
+const STACK_COUNTS = [1, 2, 3, 4, 5, 6, 8, 10];
 
 const ACQ_LABEL: Record<string, string> = {
   "raid-drop": "Raid drop",
@@ -78,7 +88,7 @@ export function ZombiesIndex() {
         rows={zombies}
         columns={columns}
         rowKey={(z) => z.key}
-        search={(z) => `${z.name} ${z.group} ${z.className}`}
+        search={(z) => `${z.name} ${z.group} ${z.className}${z.fertilizeChance !== null ? " fertilize fertilizer fertilization" : ""}`}
         searchPlaceholder="Search zombies…"
         selects={[
           { key: "class", label: "Class", options: classes.map((c) => ({ label: c, value: c })), get: (z) => z.className },
@@ -138,6 +148,17 @@ export function ZombieDetail() {
             <KeyRow label="Grow time">{duration(z.growMs)}</KeyRow>
             <KeyRow label="Tier">{z.tier}</KeyRow>
             <KeyRow label="Ability tiers">{z.abilityTiers} of 4</KeyRow>
+            {z.fertilizeChance !== null && (
+              <KeyRow label="Fertilize chance">
+                <Formula
+                  result={pct(z.fertilizeChance)}
+                  source={{ file: "src/zombie/ZombieField.ts", line: 34, label: "FERTILIZE_BY_TIER" }}
+                >
+                  <Fx>tier {z.tier} → {pct(z.fertilizeChance)}</Fx>
+                  <Fx>rolled once per veggie crop planted, while deployed</Fx>
+                </Formula>
+              </KeyRow>
+            )}
             <KeyRow label="Acquisition">
               <span className="flex flex-wrap justify-end gap-1">
                 {z.acquisition.map((a) => (
@@ -161,6 +182,96 @@ export function ZombieDetail() {
                 {floor?.dex}), so it <em>loses</em> effective stats as you level past 8 - invisible in-game.
               </Note>
             </div>
+          )}
+
+          {z.fertilizeChance !== null && (
+            <Section
+              title="Fertilizing"
+              aside={<span className="text-xs text-muted">{pct(z.fertilizeChance)} per planting</span>}
+            >
+              <Panel>
+                <p className="text-sm">
+                  Every time you plant a <strong>veggie</strong> crop, each Garden zombie <em>deployed on the farm</em> rolls
+                  its own chance in turn and the first success wins. A fertilized crop sells for{" "}
+                  <strong>double</strong> and shows drifting leaves until you harvest it.
+                </p>
+                <ul className="mt-2 space-y-1 text-xs text-muted">
+                  <li>
+                    · The rate comes only from <strong>combat tier</strong> — level, veterancy and mutations never change it.
+                  </li>
+                  <li>· Zombie crops are never fertilized (they sell for nothing), and neither is an already-fertilized plot.</li>
+                  <li>· Stored zombies don't roll. Only the ones actually out on the farm count.</li>
+                  <li>· The roll happens at planting time, so nothing you do while the crop grows can add it later.</li>
+                </ul>
+                <div className="mt-2">
+                  <SourceCite file="src/zombie/ZombieField.ts" line={189} label="tryFertilize" />
+                </div>
+              </Panel>
+
+              <div className="mt-4 grid gap-6 md:grid-cols-2">
+                <div>
+                  <h3 className="mb-2 text-sm font-semibold">If you deploy several {z.name}s</h3>
+                  <div className="overflow-x-auto rounded-lg border border-border">
+                    <table className="data-table">
+                      <thead>
+                        <tr>
+                          <th className="text-right">Deployed</th>
+                          <th className="text-right">Any fertilizes</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {STACK_COUNTS.map((n) => (
+                          <tr key={n}>
+                            <td className="text-right tabular font-medium">{n}</td>
+                            <td className="text-right tabular">{pct(1 - (1 - (z.fertilizeChance ?? 0)) ** n)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="mt-2 text-xs text-muted">
+                    Rolls are independent, so n copies give{" "}
+                    <span className="font-mono">1 − (1 − {z.fertilizeChance})ⁿ</span>. A mixed Garden line-up is{" "}
+                    <span className="font-mono">1 − Π(1 − pᵢ)</span> over everyone deployed.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="mb-2 text-sm font-semibold">All Garden zombies</h3>
+                  <div className="overflow-x-auto rounded-lg border border-border">
+                    <table className="data-table">
+                      <thead>
+                        <tr>
+                          <th>Zombie</th>
+                          <th className="text-right">Tier</th>
+                          <th className="text-right">Chance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {GARDEN_ZOMBIES.map((g) => (
+                          <tr key={g.key} className={g.key === z.key ? "bg-primary/10 font-semibold" : ""}>
+                            <td>
+                              {g.key === z.key ? (
+                                g.name
+                              ) : (
+                                <Link to={`/zombies/${zombieSlug(g)}`} className="!text-text hover:!text-primary-strong">
+                                  {g.name}
+                                </Link>
+                              )}
+                            </td>
+                            <td className="text-right tabular">{g.tier}</td>
+                            <td className="text-right tabular">{pct(g.fertilizeChance)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="mt-2 text-xs text-muted">
+                    Tiers 3 and 4 share the same {pct(0.08)} rate, so a Zombee fertilizes no better than a Flower Zombie.
+                  </p>
+                </div>
+              </div>
+            </Section>
           )}
 
           <Section title="Level-scaling curve" aside={<span className="text-xs text-muted">unmutated · floor marked</span>}>
