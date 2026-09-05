@@ -140,6 +140,17 @@ export function searchItems(): SearchItem[] {
       keywords: `${b.id} ${b.questZombies.map((z) => z.name).join(" ")}`,
     });
 
+  // Pages that aren't in the sidebar but are still worth finding by name.
+  out.push({
+    id: "pg-/fertilizing",
+    type: "Page",
+    name: "Fertilizing",
+    subtitle: "Go to page",
+    to: "/fertilizing",
+    iconFile: "leafPile.png",
+    keywords: "garden zombie fertilize fertilizer double harvest crops",
+  });
+
   // Top-level pages.
   for (const group of NAV)
     for (const item of group.items)
