@@ -15,18 +15,12 @@ function RewardValue({ kind, amount }: { kind: string; amount: number }) {
 export function SocialPage() {
   return (
     <div>
-      <PageHeader title="Social" icon={<PageIcon to="/social" />} kicker={`${g.freeDaily} free gifts a day · up to ${g.maxFriends} friends`}>
-        <ul className="space-y-1">
-          <li>You can send one gift a day to each friend.</li>
-          <li>
-            The first gift you open each day (UTC) gives <Brains value={g.firstDaily.amount} />, whatever the sender
-            actually rolled onto it.
-          </li>
-          <li>
-            After that, you expect <Brains value={g.evBrains} digits={2} /> and <Gold value={g.evGold} digits={2} /> per
-            gift.
-          </li>
-        </ul>
+      <PageHeader title="Social" icon={<PageIcon to="/social" />}>
+        <p>
+          You can send one gift a day to each friend. The first gift opened each day (UTC) gives{" "}
+          <Brains value={g.firstDaily.amount} />. After that, you expect <Brains value={g.evBrains} digits={2} /> and{" "}
+          <Gold value={g.evGold} digits={2} /> per gift.
+        </p>
       </PageHeader>
 
       <Section title="What's inside a gift">
@@ -53,7 +47,7 @@ export function SocialPage() {
           </table>
         </div>
         <p className="mt-2 text-xs text-muted">
-          Contents are rolled when the gift is <strong>sent</strong> and stored on it — opening never re-rolls, so
+          Contents are rolled when the gift is <strong>sent</strong> and stored on it, so opening never re-rolls and
           sitting on an unopened gift can't change what's inside. Neither of you sees it until the recipient opens it.{" "}
           <SourceCite file="server/src/logic.ts" line={116} label="GIFT_REWARD_TABLE" />
         </p>
@@ -62,18 +56,17 @@ export function SocialPage() {
       <Section title="Sending">
         <div className="prose-tight max-w-3xl space-y-3 text-sm">
           <p>
-            The first {g.freeDaily} gifts you send each UTC day are free; every one after that costs{" "}
-            <Gold value={g.goldCost} />. There's no cap on how many different friends you can reach in a day — gold is
-            the only thing that trims the list. Each send earns you {num(g.xpReward)} XP either way.
+            The first {g.freeDaily} gifts you send each UTC day are free; after that each costs{" "}
+            <Gold value={g.goldCost} />. There's no daily cap, only what you can afford. Every send earns you{" "}
+            {num(g.xpReward)} XP.
           </p>
           <p>
-            The free sends come off the front of the <em>day</em>, not the front of a batch, so once you've used both,
-            every gift in a "Gift all" is charged.
+            The free sends count from the start of the day, not the start of a batch. Once you've used both, "Gift all"
+            charges for every friend it reaches.
           </p>
           <p>
-            A gift to a particular friend is refused if you already gifted them today, or if they're still holding an
-            unopened gift from you. Both rules are per-recipient, so a friend who never opens anything only ever blocks
-            your gifts to <em>them</em> — everyone else stays available.
+            You can't gift a friend twice in one day, or send again while they still hold an unopened gift from you.
+            Both rules apply per friend, not to your whole list.
           </p>
         </div>
         <div className="mt-2">
@@ -83,8 +76,8 @@ export function SocialPage() {
 
       <Section title="Limits">
         <p className="max-w-3xl text-sm leading-relaxed text-text">
-          You can have up to {num(g.maxFriends)} friends, and your inbox holds {num(g.maxInbox)} unopened gifts — past
-          that, further gifts to you are refused until you open some. The friend cap bounds accepting new friends, not
+          You can have up to {num(g.maxFriends)} friends, and your inbox holds {num(g.maxInbox)} unopened gifts. Past
+          that, further gifts to you are refused until you open some. The friend cap limits accepting new friends, not
           receiving gifts from the ones you already have.
         </p>
       </Section>
