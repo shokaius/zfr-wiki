@@ -39,7 +39,7 @@ export function FertilizingPage() {
           mausoleum cannot fertilize crops.
         </p>
         <div className="mt-2">
-          <SourceCite file="src/zombie/ZombieField.ts" line={189} label="tryFertilize" />
+          <SourceCite file="src/zombie/ZombieField.ts" label="tryFertilize" />
         </div>
       </Section>
 
@@ -75,7 +75,7 @@ export function FertilizingPage() {
           </table>
         </div>
         <div className="mt-2">
-          <SourceCite file="src/zombie/ZombieField.ts" line={34} label="FERTILIZE_BY_TIER" />
+          <SourceCite file="src/zombie/ZombieField.ts" label="FERTILIZE_BY_TIER" />
         </div>
       </Section>
 

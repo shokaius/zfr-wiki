@@ -104,11 +104,11 @@ const OUT = join(ROOT, "src/data/generated");
 const ASSET_OUT = join(ROOT, "public/game-assets/all");
 
 const PLOW_COST = 10; // src/JobSystem.ts:28 (module-private const)
-// src/zombie/ZombieField.ts:34 (module-private const). Per-combat-tier chance that a
+// src/zombie/ZombieField.ts, module-private FERTILIZE_BY_TIER. Per-combat-tier chance that a
 // DEPLOYED Garden zombie fertilizes a freshly planted veggie crop. Tier 3 and 4 share
 // a rate; non-Garden groups never roll at all.
 const FERTILIZE_BY_TIER: Record<number, number> = { 1: 0.04, 2: 0.06, 3: 0.08, 4: 0.08, 5: 0.12 };
-const MAX_INBOX = 200; // server/src/index.ts:82 (module-private const)
+const MAX_INBOX = 200; // server/src/index.ts, module-private MAX_INBOX
 
 // ---- Small utils -----------------------------------------------------------
 const readJson = (p: string): any => JSON.parse(readFileSync(join(ASSETS, p), "utf8"));
