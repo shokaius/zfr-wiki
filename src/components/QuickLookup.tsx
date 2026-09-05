@@ -176,7 +176,7 @@ export function QuickLookup() {
                 <button
                   onMouseMove={() => setSel(i)}
                   onClick={() => go(it)}
-                  className={`flex w-full items-center gap-3 px-3 py-2 text-left ${active ? "bg-primary/12" : ""}`}
+                  className={`flex w-full items-center gap-3 px-3 py-2 text-left ${active ? "bg-primary/10" : ""}`}
                 >
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center">
                     {it.emoji ? (
