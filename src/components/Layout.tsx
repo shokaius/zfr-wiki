@@ -20,7 +20,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                   onClick={onNavigate}
                   className={({ isActive }) =>
                     `flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors ${
-                      isActive ? "bg-primary/12 font-semibold text-primary-strong" : "text-text hover:bg-surface-2"
+                      isActive ? "bg-primary/10 font-semibold text-primary-strong" : "text-text hover:bg-surface-2"
                     }`
                   }
                 >

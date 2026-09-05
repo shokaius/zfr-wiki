@@ -93,6 +93,8 @@ export interface Zombie {
   isDecayer: boolean;
   mutatableSlots: string[];
   acquisition: string[];
+  /** Garden zombies only: per-planting chance to fertilize. null = never fertilizes. */
+  fertilizeChance: number | null;
   scaling: ScaledStat[];
   veterancy: VetRow[];
   abilities: ZombieAbility[];
@@ -338,6 +340,31 @@ export interface EconomyFile {
     functionalGoldPerXp: number;
     brainDecorXpPerBrain: number;
     brainFunctionalXpPerBrain: number;
+  };
+}
+
+export interface GiftReward {
+  kind: string;
+  amount: number;
+  weight: number;
+  /** weight ⁄ totalWeight — the odds this entry is rolled. */
+  chance: number;
+}
+export interface SocialFile {
+  gift: {
+    freeDaily: number;
+    goldCost: number;
+    xpReward: number;
+    maxFriends: number;
+    maxInbox: number;
+    totalWeight: number;
+    rewards: GiftReward[];
+    firstDaily: { kind: string; amount: number };
+    /** Expected gold per opened gift, ignoring the daily brain floor. */
+    evGold: number;
+    /** Expected brains per opened gift, ignoring the daily brain floor. */
+    evBrains: number;
+    brainChance: number;
   };
 }
 

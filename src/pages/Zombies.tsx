@@ -8,7 +8,7 @@ import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../compon
 import { RaidChip } from "../components/entities";
 import { PageIcon } from "../components/PageIcon";
 import { zombies, zombieSlug, zombieSlugs, combat } from "../data";
-import { num, titleCase, duration, levelLabel } from "../lib/format";
+import { num, pct, titleCase, duration, levelLabel } from "../lib/format";
 import type { Zombie } from "../data/types";
 
 const ACQ_LABEL: Record<string, string> = {
@@ -78,7 +78,7 @@ export function ZombiesIndex() {
         rows={zombies}
         columns={columns}
         rowKey={(z) => z.key}
-        search={(z) => `${z.name} ${z.group} ${z.className}`}
+        search={(z) => `${z.name} ${z.group} ${z.className}${z.fertilizeChance !== null ? " fertilize fertilizer fertilization" : ""}`}
         searchPlaceholder="Search zombies…"
         selects={[
           { key: "class", label: "Class", options: classes.map((c) => ({ label: c, value: c })), get: (z) => z.className },
@@ -138,6 +138,11 @@ export function ZombieDetail() {
             <KeyRow label="Grow time">{duration(z.growMs)}</KeyRow>
             <KeyRow label="Tier">{z.tier}</KeyRow>
             <KeyRow label="Ability tiers">{z.abilityTiers} of 4</KeyRow>
+            {z.fertilizeChance !== null && (
+              <KeyRow label={<Link to="/fertilizing" className="hover:text-primary-strong">Fertilizing</Link>}>
+                {pct(z.fertilizeChance)} per planted veggie crop
+              </KeyRow>
+            )}
             <KeyRow label="Acquisition">
               <span className="flex flex-wrap justify-end gap-1">
                 {z.acquisition.map((a) => (
