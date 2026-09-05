@@ -46,11 +46,9 @@ export function SocialPage() {
             </tbody>
           </table>
         </div>
-        <p className="mt-2 text-xs text-muted">
-          Contents are rolled when the gift is <strong>sent</strong> and stored on it, so opening never re-rolls and
-          sitting on an unopened gift can't change what's inside. Neither of you sees it until the recipient opens it.{" "}
+        <div className="mt-2">
           <SourceCite file="server/src/logic.ts" label="GIFT_REWARD_TABLE" />
-        </p>
+        </div>
       </Section>
 
       <Section title="Sending">
