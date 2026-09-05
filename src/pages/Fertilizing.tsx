@@ -29,35 +29,15 @@ export function FertilizingPage() {
           </span>
         }
       >
-        <p>
-          Garden zombies can fertilize a crop as you plant it, doubling what it sells for. Nothing else in the game
-          changes the odds: the rate is fixed by the zombie's combat tier.
-        </p>
+        <p>Garden zombies can fertilize a crop as you plant it, doubling what it sells for.</p>
       </PageHeader>
 
       <Section title="How it works">
-        <div className="prose-tight max-w-3xl space-y-3 text-sm">
-          <p>
-            Every time you plant a veggie crop, each Garden zombie deployed on your farm rolls its own chance in turn.
-            The first success wins, that crop is flagged for a double harvest, and the zombie that did it walks over and
-            drops leaves on the plot until you harvest.
-          </p>
-          <p>
-            Only zombies actually out on the farm roll. Anything in storage or the Mausoleum is ignored, so a Garden
-            zombie you own but haven't deployed does nothing for you.
-          </p>
-          <p>
-            The roll happens once, at the moment of planting. Deploying a Garden zombie while a crop is already growing
-            can't fertilize it, and an already-fertilized plot won't roll again.
-          </p>
-          <p>
-            Zombie crops are never fertilized, since they sell for nothing. Veggie crops only.
-          </p>
-          <p>
-            Level, veterancy and mutations have no effect. A level 25 Master Garden Zombie fertilizes at exactly the
-            same 4% as the one you just grew.
-          </p>
-        </div>
+        <p className="max-w-3xl text-sm leading-relaxed text-text">
+          Every time you plant a veggie crop, each Garden zombie deployed on your farm has a chance to fertilize the
+          crop. This chance is determined by the tier of the zombie. Zombie crops cannot be fertilized. Zombies in the
+          mausoleum cannot fertilize crops.
+        </p>
         <div className="mt-2">
           <SourceCite file="src/zombie/ZombieField.ts" line={189} label="tryFertilize" />
         </div>
@@ -94,11 +74,9 @@ export function FertilizingPage() {
             </tbody>
           </table>
         </div>
-        <p className="mt-2 text-xs text-muted">
-          Tiers 3 and 4 share the same {pct(0.08)} rate, so a Zombee fertilizes no better than a Flower Zombie despite
-          costing more and unlocking later.{" "}
+        <div className="mt-2">
           <SourceCite file="src/zombie/ZombieField.ts" line={34} label="FERTILIZE_BY_TIER" />
-        </p>
+        </div>
       </Section>
 
       <Section title="Deploying several">
@@ -128,12 +106,6 @@ export function FertilizingPage() {
             </tbody>
           </table>
         </div>
-        <p className="mt-2 text-xs text-muted">
-          Rolls are independent, so n zombies at the same rate give{" "}
-          <span className="font-mono">1 − (1 − p)ⁿ</span>. A mixed line-up is{" "}
-          <span className="font-mono">1 − Π(1 − pᵢ)</span> across everyone deployed. Ten Zombutterflies still miss
-          about {pct((1 - 0.12) ** 10)} of your plantings.
-        </p>
       </Section>
     </div>
   );
