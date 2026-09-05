@@ -14,7 +14,7 @@ import { ZombieCalculatorPage } from "./pages/ZombieCalculator";
 import { PotSimulatorPage } from "./pages/PotSimulator";
 import { EpicBossesIndex, EpicBossDetail } from "./pages/EpicBosses";
 import { QuestsPage } from "./pages/Quests";
-import { GiftingPage } from "./pages/Gifting";
+import { SocialPage } from "./pages/Social";
 import { LevelingPage } from "./pages/Economy";
 import { ProgressionPage } from "./pages/Progression";
 import { AboutPage } from "./pages/About";
@@ -46,7 +46,7 @@ export default function App() {
           <Route path="/epic-bosses" element={<EpicBossesIndex />} />
           <Route path="/epic-bosses/:slug" element={<EpicBossDetail />} />
           <Route path="/quests" element={<QuestsPage />} />
-          <Route path="/gifting" element={<GiftingPage />} />
+          <Route path="/social" element={<SocialPage />} />
           <Route path="/leveling" element={<LevelingPage />} />
           <Route path="/economy" element={<LevelingPage />} />
           <Route path="/progression" element={<ProgressionPage />} />

@@ -893,6 +893,9 @@ const giftGoldEv = giftRewards
 const giftBrainChance = giftRewards
   .filter((r) => r.kind === "brain")
   .reduce((sum, r) => sum + r.chance, 0);
+const giftBrainEv = giftRewards
+  .filter((r) => r.kind === "brain")
+  .reduce((sum, r) => sum + r.chance * r.amount, 0);
 writeJson("social", {
   gift: {
     freeDaily: FREE_DAILY_GIFTS,
@@ -904,6 +907,7 @@ writeJson("social", {
     rewards: giftRewards,
     firstDaily: { kind: FIRST_DAILY_GIFT_REWARD.kind, amount: FIRST_DAILY_GIFT_REWARD.amount },
     evGold: round(giftGoldEv, 2),
+    evBrains: round(giftBrainEv, 5),
     brainChance: round(giftBrainChance, 5),
   },
 });

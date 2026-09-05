@@ -17,7 +17,7 @@ const META: Record<string, { count?: number; note?: string }> = {
   "/raids": { count: raids.length },
   "/epic-bosses": { count: epicBosses.length },
   "/quests": { count: questsFile.core.length + questsFile.reforged.length },
-  "/gifting": { note: "Friend gift odds" },
+  "/social": { note: "Friends & gifting" },
   "/calculator": { note: "Best build per stat" },
   "/pot-simulator": { note: "Combine two zombies" },
   "/leveling": { note: `${economy.maxLevel} levels` },

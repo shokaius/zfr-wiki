@@ -362,6 +362,8 @@ export interface SocialFile {
     firstDaily: { kind: string; amount: number };
     /** Expected gold per opened gift, ignoring the daily brain floor. */
     evGold: number;
+    /** Expected brains per opened gift, ignoring the daily brain floor. */
+    evBrains: number;
     brainChance: number;
   };
 }
