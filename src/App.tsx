@@ -9,7 +9,6 @@ import { BoostsPage, BoostDetail } from "./pages/Boosts";
 import { MutationsPage } from "./pages/Mutations";
 import { AbilitiesPage } from "./pages/Abilities";
 import { RaidsIndex, RaidDetail } from "./pages/Raids";
-import { CombatPage } from "./pages/Combat";
 import { ZombieCalculatorPage } from "./pages/ZombieCalculator";
 import { PotSimulatorPage } from "./pages/PotSimulator";
 import { EpicBossesIndex, EpicBossDetail } from "./pages/EpicBosses";
@@ -41,7 +40,6 @@ export default function App() {
           <Route path="/abilities" element={<AbilitiesPage />} />
           <Route path="/raids" element={<RaidsIndex />} />
           <Route path="/raids/:slug" element={<RaidDetail />} />
-          <Route path="/combat" element={<CombatPage />} />
           <Route path="/calculator" element={<ZombieCalculatorPage />} />
           <Route path="/pot-simulator" element={<PotSimulatorPage />} />
           <Route path="/epic-bosses" element={<EpicBossesIndex />} />

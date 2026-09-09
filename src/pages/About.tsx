@@ -38,11 +38,7 @@ export function AboutPage() {
   return (
     <div>
       <PageHeader title="Sources & about" icon={<PageIcon to="/about" />} kicker="how this wiki is built">
-        <p>
-          Every page is generated from the Zombie Farm 2 Reforged repo - JSON assets read directly, TypeScript constants imported (never
-          re-parsed) and run through the game's own functions. So the wiki can't disagree with the game, and a balance patch shows up
-          here as a diff.
-        </p>
+        <p>Every page is generated from the Zombie Farm 2 Reforged repo.</p>
       </PageHeader>
 
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
