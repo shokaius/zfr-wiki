@@ -3,10 +3,12 @@ import { GameIcon } from "../components/ui/GameIcon";
 import { Badge } from "../components/ui/Badge";
 import { PageHeader, Section, Panel, Note } from "../components/ui/layout";
 import { SourceCite } from "../components/ui/SourceCite";
-import { abilities, abilitiesFile } from "../data";
+import { abilities, abilitiesFile, zombies } from "../data";
 import { PageIcon } from "../components/PageIcon";
 import { titleCase } from "../lib/format";
 import type { Ability } from "../data/types";
+
+const OWN_LADDER_COUNT = zombies.filter((z) => z.hasOwnLadder).length;
 
 export function AbilitiesPage() {
   const columns: Column<Ability>[] = [
@@ -49,7 +51,8 @@ export function AbilitiesPage() {
       <PageHeader title="Abilities" icon={<PageIcon to="/abilities" />} kicker={`${abilities.length} abilities`}>
         <p>
           Combat abilities are granted by a zombie's group across four tiers. A tier is usable when the zombie's class carries it and its
-          boss has been beaten ({Object.values(abilitiesFile.tierBoss).join(", ")}).
+          boss has been beaten ({Object.values(abilitiesFile.tierBoss).join(", ")}). The Groups column below is the group ladder;
+          {" "}{OWN_LADDER_COUNT} named zombies carry their own ladder instead, shown on their own pages.
         </p>
       </PageHeader>
 

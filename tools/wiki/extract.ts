@@ -20,6 +20,8 @@ import { CROP_MUTATIONS, CROP_MUTATION_CHANCE } from "../../game/src/zombie/crop
 import { classTierRank, CLASS_COLOR } from "../../game/src/zombie/taxonomy";
 import {
   GROUP_ABILITIES,
+  SPECIAL_ABILITIES,
+  unitAbilityAt,
   ABILITY_POOL,
   ABILITY_TIER,
   TIER_BOSS,
@@ -59,6 +61,8 @@ import {
 } from "../../game/src/raid/brainDrops";
 import {
   RAID_ZOMBIE_DROPS,
+  RAID_ELITE_ZOMBIE_DROPS,
+  RAID_ZOMBIE_SOURCES,
   raidZombieDropRate,
   rollRaidZombieDropWithPity,
   nextRaidZombieDryWins,
@@ -243,10 +247,21 @@ writeJson("crops", crops);
 // ===========================================================================
 const GROUPS = Object.keys(LEVEL_SCALE_ENDPOINTS);
 const HEADLESS = "Headless";
-// which raids drop each zombie (rare drops)
-const zombieDropRaid: Record<string, { raidId: number; name: string }> = {};
-for (const [rid, d] of Object.entries(RAID_ZOMBIE_DROPS)) {
-  zombieDropRaid[(d as any).key] = { raidId: Number(rid), name: (d as any).name };
+// Which raid drops each rare zombie. RAID_ZOMBIE_SOURCES covers BOTH prizes: the
+// ordinary win's zombie and the promoted one an elite (Brain Ticket) fight pays in
+// its place, so a promoted prize is credited to its raid rather than looking like a
+// market buy. `elite` says which fight pays it.
+const zombieDropRaid: Record<string, { raidId: number; name: string; elite: boolean }> = {};
+const raidNameById: Record<number, string> = Object.fromEntries(
+  raidsRaw.map((r: any) => [Number(r.id), String(r.name)])
+);
+for (const src of RAID_ZOMBIE_SOURCES) {
+  // `name` is the RAID's name: the calculator prints it as "drop from the <name> raid".
+  zombieDropRaid[src.drop.key] = {
+    raidId: src.raidId,
+    name: raidNameById[src.raidId] ?? String(src.raidId),
+    elite: src.elite,
+  };
 }
 // which zombies are epic quest rewards
 const epicRewardZombies = new Set<string>(Object.values(EPIC_QUEST_ZOMBIE_REWARDS as Record<string, string>));
@@ -300,9 +315,14 @@ const zombies = zombiesRaw.map((z) => {
   if (z.category === "mutant") acquisition.push("pre-mutated");
   if (acquisition.length === 0) acquisition.push(z.brainsNeeded ? "market-brains" : "market-gold");
 
-  // group ability ladder (tiers 1..4), each gated on beating a boss
-  const abilities = ((GROUP_ABILITIES as any)[group] ?? []).map((abKey: string | null, i: number) => {
-    const tier = i + 1;
+  // This unit's OWN ability ladder (tiers 1..4), each gated on beating a boss. Most
+  // zombies just take their group's row, but SPECIAL_ABILITIES gives eleven named units
+  // a ladder of their own (Dr. Zombie heals, the Ninjombies get Turbo Speed, the Minis
+  // Proto/Zombug carry Resurrect), so ask the game which ability THIS key has rather
+  // than reading the group matrix directly.
+  const hasOwnLadder = (SPECIAL_ABILITIES as any)[z.key] != null;
+  const abilities = [1, 2, 3, 4].map((tier) => {
+    const abKey = unitAbilityAt(z.key, group, tier);
     const meta = abKey ? (ABILITY_POOL as any)[abKey] : null;
     return {
       tier,
@@ -348,6 +368,8 @@ const zombies = zombiesRaw.map((z) => {
     scaling,
     veterancy: vet,
     abilities,
+    /** True when this zombie's ladder overrides its group's (SPECIAL_ABILITIES). */
+    hasOwnLadder,
     dropRaid: zombieDropRaid[z.key] ?? null,
   };
   zombiesByKey[z.key] = out;
@@ -581,15 +603,18 @@ function simExpectedBrains(recLevel: number, luck: number): number {
   }
   return total / N;
 }
-// expected wins per rare-zombie drop (rate + pity), by dice+luck
-function simRareExpectedWins(raidId: number, dice: number, luck: number): number | null {
+// Expected wins per rare-zombie drop (rate + pity), by dice+luck. `elite` picks which
+// PRIZE is being chased: a raid that promotes its prize pays a different zombie on an
+// elite fight, and keeps its own dry-win streak for it (raidZombieDryKey), so the two
+// are simulated independently rather than sharing one streak.
+function simRareExpectedWins(raidId: number, dice: number, luck: number, elite = false): number | null {
   if (!RAID_ZOMBIE_DROPS[raidId]) return null;
-  const rng = mulberry32(0x85ebca6b ^ (raidId * 911 + dice * 53 + luck * 7));
+  const rng = mulberry32(0x85ebca6b ^ (raidId * 911 + dice * 53 + luck * 7 + (elite ? 1 : 0) * 104729));
   const N = 400000;
   let dry = 0;
   let dropCount = 0;
   for (let i = 0; i < N; i++) {
-    const got = !!rollRaidZombieDropWithPity(raidId, true, rng(), dry, dice, luck);
+    const got = !!rollRaidZombieDropWithPity(raidId, true, rng(), dry, dice, luck, elite);
     if (got) dropCount++;
     dry = nextRaidZombieDryWins(dry, got);
   }
@@ -704,14 +729,22 @@ const raids = raidsRaw.map((r) => {
       decorSellEV: round(decorSellEV),
       lootBrainsEV: round(lootBrainsEV, 3),
       rareRateNormal: round(raidZombieDropRate(r.id, dice, 1), 6),
-      rareRateElite: round(raidZombieDropRate(r.id, dice, ELITE_BRAIN_LUCK), 6),
+      // On a raid that promotes its prize this is the PROMOTED zombie's own rate, and
+      // the elite luck multiplier is deliberately not applied on top (the promoted rate
+      // already is the elite premium). Raids with a single prize keep rate x luck.
+      rareRateElite: round(raidZombieDropRate(r.id, dice, ELITE_BRAIN_LUCK, true), 6),
       rareExpectedWinsNormal: simRareExpectedWins(r.id, dice, 1),
-      rareExpectedWinsElite: simRareExpectedWins(r.id, dice, ELITE_BRAIN_LUCK),
+      rareExpectedWinsElite: simRareExpectedWins(r.id, dice, ELITE_BRAIN_LUCK, true),
     });
   }
 
+  // The ordinary win's prize, and the promoted one an elite fight pays instead (null
+  // when this raid pays the same zombie either way).
   const rare = RAID_ZOMBIE_DROPS[r.id]
     ? { key: (RAID_ZOMBIE_DROPS[r.id] as any).key, name: (RAID_ZOMBIE_DROPS[r.id] as any).name }
+    : null;
+  const rareElite = RAID_ELITE_ZOMBIE_DROPS[r.id]
+    ? { key: (RAID_ELITE_ZOMBIE_DROPS[r.id] as any).key, name: (RAID_ELITE_ZOMBIE_DROPS[r.id] as any).name }
     : null;
 
   return {
@@ -739,6 +772,7 @@ const raids = raidsRaw.map((r) => {
     lootTiers,
     stages,
     rare,
+    rareElite,
     ev: {
       byDice,
       maxUsefulDice: maxDice,
