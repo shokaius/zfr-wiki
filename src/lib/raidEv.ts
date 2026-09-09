@@ -51,6 +51,9 @@ export interface ComputedRaidEv {
   lootBrainsEV: number;
   rareRate: number;
   rareExpectedWins: number | null;
+  /** The zombie this fight actually rolls for: a raid that promotes its prize pays a
+   *  different one on an elite (Brain Ticket) fight, so this is not always raid.rare. */
+  rarePrize: { key: string; name: string } | null;
   tierProbs: number[];
 }
 
@@ -75,6 +78,7 @@ export function computeRaidEv(raid: Raid, s: RaidSettings): ComputedRaidEv {
     lootBrainsEV: cell.lootBrainsEV,
     rareRate: s.elite ? cell.rareRateElite : cell.rareRateNormal,
     rareExpectedWins: s.elite ? cell.rareExpectedWinsElite : cell.rareExpectedWinsNormal,
+    rarePrize: (s.elite ? raid.rareElite : null) ?? raid.rare,
     tierProbs: cell.tierProbs,
   };
 }

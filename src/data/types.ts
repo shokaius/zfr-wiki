@@ -98,7 +98,11 @@ export interface Zombie {
   scaling: ScaledStat[];
   veterancy: VetRow[];
   abilities: ZombieAbility[];
-  dropRaid: { raidId: number; name: string } | null;
+  /** True when this zombie carries its own ability ladder instead of its group's. */
+  hasOwnLadder: boolean;
+  /** The raid this zombie drops from. `elite` = paid by an elite (Brain Ticket) fight
+   *  in place of that raid's ordinary prize. */
+  dropRaid: { raidId: number; name: string; elite: boolean } | null;
 }
 
 export interface Ability {
@@ -290,7 +294,11 @@ export interface Raid {
   hasVoucherInLoot: boolean;
   lootTiers: LootTier[];
   stages: RaidStage[];
+  /** The prize an ordinary win rolls for. */
   rare: { key: string; name: string } | null;
+  /** The promoted prize an elite (Brain Ticket) fight pays instead, when this raid has
+   *  one. Null means an elite fight pays the same zombie as an ordinary win. */
+  rareElite: { key: string; name: string } | null;
   ev: {
     byDice: RaidEvDice[];
     maxUsefulDice: number;

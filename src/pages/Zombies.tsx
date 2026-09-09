@@ -153,6 +153,7 @@ export function ZombieDetail() {
             {z.dropRaid && (
               <div className="mt-2 text-right text-xs">
                 Drops from <RaidChip id={z.dropRaid.raidId} />
+                {z.dropRaid.elite && <span className="text-muted"> on an elite (Brain Ticket) fight only</span>}
               </div>
             )}
           </Panel>
@@ -231,6 +232,12 @@ export function ZombieDetail() {
             <p className="mt-2 text-xs text-muted">
               Abilities are double-gated: this zombie's class carries {z.abilityTiers} tier{z.abilityTiers === 1 ? "" : "s"}, and each
               tier also requires its boss beaten globally.
+              {z.hasOwnLadder && (
+                <>
+                  {" "}
+                  This one carries its <strong>own</strong> ladder rather than the standard {z.group} one.
+                </>
+              )}
             </p>
           </Section>
 
