@@ -86,9 +86,15 @@ import { ECONOMY, buyXp } from "../../game/src/economy";
 import { plowXp, harvestXp } from "../../game/src/farmRewards";
 import { XP_THRESHOLDS } from "../../game/src/GameState";
 import { MAX_ZOMBIE_POTS } from "../../game/src/placementLimit";
-import { EPIC_BOSSES, EPIC_BOSS_UNLOCK_LEVELS, epicBossHp } from "../../game/src/epicBoss/catalog";
+import { EPIC_BOSSES, EPIC_BOSS_UNLOCK_LEVELS, epicBossHp, epicBossDamage, EPIC_BOSS_DAMAGE_RUNG_STEP } from "../../game/src/epicBoss/catalog";
 import { EPIC_QUEST_ZOMBIE_REWARDS } from "../../game/src/epicBoss/rewards";
-import { EPIC_BOSS_FIGHT_BRAIN_COST } from "../../game/src/epicBoss/tokens";
+import {
+  EPIC_BOSS_FIGHT_BRAIN_COST,
+  epicBossTokenChance,
+  epicBossTokenRatePerPlotDay,
+  EFFECTIVE_MAX_TOKEN_CHANCE,
+  FAVORITE_CROP_TOKEN_BONUS,
+} from "../../game/src/epicBoss/tokens";
 import { EPIC_BOSS_FAVORITE_CROPS } from "../../game/src/epicBoss/favoriteCrops";
 import { FREE_DAILY_GIFTS, GIFT_GOLD_COST, GIFT_XP_REWARD, MAX_FRIENDS } from "../../game/src/net/protocol";
 // The gift reward roll is server-owned (the client never learns the contents until
@@ -801,14 +807,52 @@ const epicBosses = (EPIC_BOSSES as any[]).map((def) => {
   const questIcon = epicIcon(def.id, def.questIcon);
   const lootIcon = epicIcon(def.id, def.lootIcon);
   const unlockLevel = (EPIC_BOSS_UNLOCK_LEVELS as any)[def.id] ?? null;
-  const hpCurve = Array.from({ length: def.maxLevel }, (_, i) => ({ level: i + 1, hp: epicBossHp(def, i + 1) }));
-  const questZombies = (def.questIds ?? [])
-    .filter((qid: string) => questZombieByQuestId[qid])
-    .map((qid: string) => {
-      const zKey = questZombieByQuestId[qid];
-      const z = zombiesByKey[zKey];
-      return { questId: qid, key: zKey, name: z?.name ?? zKey, dps: z?.dps ?? null, hp: z?.hp ?? null, className: z?.className ?? null };
-    });
+  // A boss swings every ATTACK_INTERVAL_SEC.enemy / dex seconds and each swing lands
+  // str x POWER_PER_STR, so damage is fully derivable from the same two stats the fight
+  // uses. `maxAttemptDamage` is the ceiling for ONE attempt (fightMs), which is the
+  // number worth reading against the rung's HP: HP climbs steeply, damage barely does.
+  const swingMs = (ATTACK_INTERVAL_SEC.enemy / Math.max(0.1, def.unitStats?.dex ?? 1)) * 1000;
+  const hpCurve = Array.from({ length: def.maxLevel }, (_, i) => {
+    const level = i + 1;
+    const perHit = epicBossDamage(def, level) * POWER_PER_STR;
+    const dps = perHit / (swingMs / 1000);
+    return {
+      level,
+      hp: epicBossHp(def, level),
+      damagePerHit: round(perHit, 1),
+      dps: round(dps, 1),
+      maxAttemptDamage: round(dps * (def.fightMs / 1000)),
+    };
+  });
+  const attacks = (def.unitStats?.attacks ?? []).map((a: any) => ({
+    name: a.name,
+    frequency: a.frequency ?? 100,
+    damageTiming: a.damageTiming ?? null,
+  }));
+  // One entry per distinct zombie. Rocky Rhino awards Brock Coley from TWO quests
+  // (8000 and 8011), and listing the same prize twice reads as a rendering fault, so
+  // collapse by key and keep every quest that pays it.
+  const questZombies: any[] = [];
+  const questZombieIndex: Record<string, any> = {};
+  for (const qid of def.questIds ?? []) {
+    const zKey = questZombieByQuestId[qid];
+    if (!zKey) continue;
+    if (questZombieIndex[zKey]) {
+      questZombieIndex[zKey].questIds.push(qid);
+      continue;
+    }
+    const z = zombiesByKey[zKey];
+    const entry = {
+      questIds: [qid],
+      key: zKey,
+      name: z?.name ?? zKey,
+      dps: z?.dps ?? null,
+      hp: z?.hp ?? null,
+      className: z?.className ?? null,
+    };
+    questZombieIndex[zKey] = entry;
+    questZombies.push(entry);
+  }
   const loot = (def.loot ?? []).map((l: any) => {
     ref(l.sprite);
     return { level: l.level, name: l.name, sprite: l.sprite ?? null, unique: !!l.unique, tile: l.tile ?? null };
@@ -825,17 +869,53 @@ const epicBosses = (EPIC_BOSSES as any[]).map((def) => {
     maxLevel: def.maxLevel,
     baseHp: def.baseHp,
     unitStats: { str: def.unitStats?.str, con: def.unitStats?.con, dex: def.unitStats?.dex },
+    attacks,
+    swingMs: round(swingMs),
+    damageRungStep: EPIC_BOSS_DAMAGE_RUNG_STEP,
     hpCurve,
     questZombies,
     loot,
-    favoriteCrop: favCropKey ? { key: favCropKey, name: cropByKey[favCropKey]?.name ?? favCropKey } : null,
+    favoriteCrop: favCropKey
+      ? {
+          key: favCropKey,
+          name: cropByKey[favCropKey]?.name ?? favCropKey,
+          // What that crop rolls per harvest with and without this boss running.
+          chance: round(epicBossTokenChance(cropByKey[favCropKey]?.growMs ?? 0, cropByKey[favCropKey]?.sell ?? 0, true), 5),
+          baseChance: round(epicBossTokenChance(cropByKey[favCropKey]?.growMs ?? 0, cropByKey[favCropKey]?.sell ?? 0, false), 5),
+        }
+      : null,
     portrait,
     questIcon,
     lootIcon,
     fightBrainCost: EPIC_BOSS_FIGHT_BRAIN_COST,
   };
 });
-writeJson("epic-bosses", epicBosses);
+// Boss-token supply: every VEGGIE crop can roll a token while a run is active, and the
+// running boss's favourite gets a flat +25% on top. Emitted per crop so the page can
+// show the real ranking instead of asserting one — the curve is a hump in grow time, so
+// the best crop per HARVEST and the best per PLOT-DAY are not the same crop.
+const tokenCrops = crops
+  .map((c: any) => ({
+    key: c.key,
+    name: c.name,
+    growMs: c.growMs,
+    sell: c.sell,
+    chance: round(epicBossTokenChance(c.growMs, c.sell, false), 5),
+    favoriteChance: round(epicBossTokenChance(c.growMs, c.sell, true), 5),
+    perPlotDay: round(epicBossTokenRatePerPlotDay(c.growMs, c.sell, false), 3),
+    favoritePerPlotDay: round(epicBossTokenRatePerPlotDay(c.growMs, c.sell, true), 3),
+  }))
+  .sort((a, b) => b.perPlotDay - a.perPlotDay);
+writeJson("epic-bosses", {
+  list: epicBosses,
+  tokens: {
+    ceiling: round(EFFECTIVE_MAX_TOKEN_CHANCE, 5),
+    favoriteCeiling: round(EFFECTIVE_MAX_TOKEN_CHANCE * (1 + FAVORITE_CROP_TOKEN_BONUS), 5),
+    favoriteBonus: FAVORITE_CROP_TOKEN_BONUS,
+    fightBrainCost: EPIC_BOSS_FIGHT_BRAIN_COST,
+    crops: tokenCrops,
+  },
+});
 
 // ===========================================================================
 // UPGRADES (farm size + climate)

@@ -28,6 +28,7 @@ import type {
   Enemy,
   Attack,
   EpicBoss,
+  EpicBossesFile,
   UpgradesFile,
   EconomyFile,
   CombatFile,
@@ -47,7 +48,9 @@ export const questsFile = questsJson as unknown as QuestsFile;
 export const raids = raidsJson as unknown as Raid[];
 export const enemies = enemiesJson as unknown as Enemy[];
 export const attacks = attacksJson as unknown as Attack[];
-export const epicBosses = epicBossesJson as unknown as EpicBoss[];
+export const epicBossesFile = epicBossesJson as unknown as EpicBossesFile;
+export const epicBosses = epicBossesFile.list;
+export const epicTokens = epicBossesFile.tokens;
 export const upgrades = upgradesJson as unknown as UpgradesFile;
 export const economy = economyJson as unknown as EconomyFile;
 export const combat = combatJson as unknown as CombatFile;
@@ -65,6 +68,12 @@ export const boostByKey = by(boosts, (b) => b.key);
 export const enemyByKey = by(enemies, (e) => e.key);
 export const raidById = Object.fromEntries(raids.map((r) => [String(r.id), r])) as Record<string, Raid>;
 export const epicBossById = by(epicBosses, (b) => b.id);
+
+/** Prize zombie key -> the Epic Boss whose ladder pays it, so a zombie page can link
+ *  back to its source the way raid drops already do. */
+export const epicBossByZombieKey: Record<string, EpicBoss> = Object.fromEntries(
+  epicBosses.flatMap((b) => b.questZombies.map((z) => [z.key, b] as const))
+);
 
 // ---- Slug helpers (stable URLs from names, unique within a domain) ---------
 function slugMap<T>(arr: T[], name: (t: T) => string): { toSlug: Map<T, string>; bySlug: Record<string, T> } {

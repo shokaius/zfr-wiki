@@ -308,6 +308,28 @@ export interface Raid {
   };
 }
 
+export interface TokenCrop {
+  key: string;
+  name: string;
+  growMs: number;
+  sell: number;
+  /** Per-harvest token chance when this is NOT the running boss's favourite. */
+  chance: number;
+  favoriteChance: number;
+  perPlotDay: number;
+  favoritePerPlotDay: number;
+}
+export interface EpicBossesFile {
+  list: EpicBoss[];
+  tokens: {
+    ceiling: number;
+    favoriteCeiling: number;
+    favoriteBonus: number;
+    fightBrainCost: number;
+    crops: TokenCrop[];
+  };
+}
+
 export interface EpicBoss {
   id: string;
   name: string;
@@ -319,10 +341,18 @@ export interface EpicBoss {
   maxLevel: number;
   baseHp: number;
   unitStats: { str: number; con: number; dex: number };
-  hpCurve: { level: number; hp: number }[];
-  questZombies: { questId: string; key: string; name: string; dps: number | null; hp: number | null; className: string | null }[];
+  /** The boss's attack table. Every boss ships exactly one at frequency 100 today. */
+  attacks: { name: string; frequency: number; damageTiming: number | null }[];
+  /** Milliseconds between swings — ATTACK_INTERVAL_SEC.enemy / dex. */
+  swingMs: number;
+  /** Compounding damage growth per rung (0.05 = +5% each). */
+  damageRungStep: number;
+  /** Per rung: the pool you chip down, and what the boss deals while you do it.
+   *  `maxAttemptDamage` is the most it can deal in one full-length attempt. */
+  hpCurve: { level: number; hp: number; damagePerHit: number; dps: number; maxAttemptDamage: number }[];
+  questZombies: { questIds: string[]; key: string; name: string; dps: number | null; hp: number | null; className: string | null }[];
   loot: { level: number; name: string; sprite: string | null; unique: boolean; tile: string | null }[];
-  favoriteCrop: { key: string; name: string } | null;
+  favoriteCrop: { key: string; name: string; chance: number; baseChance: number } | null;
   portrait: string;
   questIcon: string;
   lootIcon: string;

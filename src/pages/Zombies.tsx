@@ -5,9 +5,9 @@ import { Gold, Brains } from "../components/ui/Currency";
 import { ClassBadge, Badge } from "../components/ui/Badge";
 import { Formula, Fx } from "../components/ui/Formula";
 import { PageHeader, Breadcrumbs, Section, Panel, KeyRow, Note } from "../components/ui/layout";
-import { RaidChip } from "../components/entities";
+import { RaidChip, EpicBossChip } from "../components/entities";
 import { PageIcon } from "../components/PageIcon";
-import { zombies, zombieSlug, zombieSlugs, combat } from "../data";
+import { zombies, zombieSlug, zombieSlugs, combat, epicBossByZombieKey } from "../data";
 import { num, pct, titleCase, duration, levelLabel } from "../lib/format";
 import type { Zombie } from "../data/types";
 
@@ -97,6 +97,7 @@ export function ZombieDetail() {
   const z = slug ? zombieSlugs.bySlug[slug] : undefined;
   if (!z) return <Note tone="warn">Zombie not found.</Note>;
   const floor = combat.levelScaleEndpoints[z.group];
+  const epicBoss = epicBossByZombieKey[z.key];
 
   return (
     <div>
@@ -154,6 +155,11 @@ export function ZombieDetail() {
               <div className="mt-2 text-right text-xs">
                 Drops from <RaidChip id={z.dropRaid.raidId} />
                 {z.dropRaid.elite && <span className="text-muted"> on an elite (Brain Ticket) fight only</span>}
+              </div>
+            )}
+            {epicBoss && (
+              <div className="mt-2 text-right text-xs">
+                Prize from <EpicBossChip id={epicBoss.id} />
               </div>
             )}
           </Panel>
