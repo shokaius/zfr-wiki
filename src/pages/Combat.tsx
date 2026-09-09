@@ -137,6 +137,33 @@ export function CombatPage() {
           clear repeats exactly.
         </Note>
       </Section>
+
+      <Section title="Where each group stands">
+        <div className="prose-tight max-w-3xl space-y-3 text-sm">
+          <p>
+            A zombie's group decides where it fights, which matters more than its stats in a close raid. Most zombies
+            take their place in the line and are punished by the depth bands above.
+          </p>
+          <p>
+            <strong>Headless</strong> push to the front. A Headless leads its row and is the only body that steps ahead
+            of the line, so it takes the first hit and holds the enemy off whatever is behind it.
+          </p>
+          <p>
+            <strong>Garden</strong> zombies station at the rear, but only when they actually carry Heal, Heal All or
+            Resurrect. They deploy last, stand well outside the combat zone, and the boss lobs its throws at them over
+            the line. A Garden zombie without one of those three abilities has nothing to do back there, so it fights
+            in the line like everyone else.
+          </p>
+          <p>
+            That check is on the ability, not the body. A <strong>Small</strong> zombie carrying Resurrect still fights
+            in the line: it revives from wherever it is standing rather than earning a support station.
+          </p>
+        </div>
+        <div className="mt-2">
+          <SourceCite file="src/raid/CombatEngine.ts" label="supportsFromRear" />{" "}
+          <SourceCite file="src/raid/BattleSim.ts" label="armyOrder" />
+        </div>
+      </Section>
     </div>
   );
 }
