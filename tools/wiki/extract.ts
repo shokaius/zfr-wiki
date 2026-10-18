@@ -465,6 +465,8 @@ const placeables = placeablesRaw.map((p) => {
     authoredXp: p.xp,
     tileW: p.tileW,
     tileH: p.tileH,
+    lifeForce: p.lifeForce ?? 0,
+    lifeForceSource: p.lifeForceSource ?? null,
     sprite: p.sprite,
     growingSprite: p.growingSprite || null,
     armyMax: p.armyMax || 0,

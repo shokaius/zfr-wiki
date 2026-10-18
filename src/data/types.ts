@@ -138,6 +138,8 @@ export interface Placeable {
   authoredXp: number;
   tileW: number;
   tileH: number;
+  lifeForce: number;
+  lifeForceSource: string | null;
   sprite: string;
   growingSprite: string | null;
   armyMax: number;

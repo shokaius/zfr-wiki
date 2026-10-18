@@ -37,6 +37,48 @@ export function PlaceablesIndex() {
     { key: "sell", header: "Sell", sortable: true, align: "right", value: (p) => p.sellValue, render: (p) => <Gold value={p.sellValue} /> },
     { key: "tiles", header: "Tiles", align: "right", value: (p) => p.tileW * p.tileH, render: (p) => `${p.tileW}×${p.tileH}` },
     {
+      key: "lifeForce",
+      header: "LifeForce",
+      sortable: true,
+      align: "right",
+      value: (p) => p.lifeForce > 0 ? p.lifeForce : null,
+      render: (p) =>
+  p.lifeForce > 0
+    ? num(p.lifeForce)
+    : <span className="text-muted">-</span>,
+    },
+    {
+      key: "lifeForcePerTile",
+      header: "LF / Tile",
+      sortable: true,
+      align: "right",
+      value: (p) => {
+        const tiles = p.tileW * p.tileH;
+        return p.lifeForce > 0 && tiles > 0 ? p.lifeForce / tiles : null;
+      },
+      render: (p) => {
+        const tiles = p.tileW * p.tileH;
+        return p.lifeForce > 0 && tiles > 0
+          ? (p.lifeForce / tiles).toFixed(2)
+          : <span className="text-muted">-</span>;
+      },
+    },
+    {
+      key: "goldPerLifeForce",
+      header: "Gold / LF",
+      sortable: true,
+      align: "right",
+      hint: "Gold cost divided by LifeForce. Brain-priced and reward items are excluded.",
+      value: (p) =>
+        !p.brainsNeeded && p.category !== "reward" && p.cost > 0 && p.lifeForce > 0
+          ? p.cost / p.lifeForce
+          : null,
+            render: (p) =>
+        !p.brainsNeeded && p.category !== "reward" && p.cost > 0 && p.lifeForce > 0
+          ? (p.cost / p.lifeForce).toFixed(2)
+          : (<span className="text-muted">-</span>),
+    },
+    {
       key: "effect",
       header: "Effect / yield",
       value: (p) => p.effect ?? "",
