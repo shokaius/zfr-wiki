@@ -16,7 +16,8 @@ import { execSync } from "node:child_process";
 
 // ---- Game modules (all headless-safe under tsx) ----------------------------
 import { SLOTS, MUTATION_LIST } from "../../game/src/zombie/mutations";
-import { CROP_MUTATIONS, CROP_MUTATION_CHANCE } from "../../game/src/zombie/cropMutations";
+import { CROP_MUTATIONS } from "../../game/src/zombie/cropMutations";
+import { cropMutationChance } from "../../game/src/lifeForce";
 import { classTierRank, CLASS_COLOR } from "../../game/src/zombie/taxonomy";
 import {
   GROUP_ABILITIES,
@@ -217,7 +218,11 @@ const mutations = MUTATION_LIST.map((m: any) => {
     unlockLevel: Number.isFinite(minLevel) ? minLevel : null,
   };
 });
-writeJson("mutations", { slots: SLOTS, chancePerPlot: CROP_MUTATION_CHANCE, list: mutations });
+writeJson("mutations", {
+  slots: SLOTS,
+  chancePerPlot: cropMutationChance(0),
+  list: mutations,
+});
 
 // ===========================================================================
 // CROPS
@@ -983,7 +988,7 @@ writeJson("combat", {
   },
   // Heal ability magnitude/cadence. Consts are module-private in BattleSim.ts.
   heal: { powerMult: 0.5, aoeMs: 20000 }, // src/raid/BattleSim.ts:249,252
-  cropMutationChance: CROP_MUTATION_CHANCE, // per adjacent mutagen plot; 4 = guaranteed
+  cropMutationChance: cropMutationChance(0), // value calculated by the newer game source
   maxAdjacentPlots: 8, // src/zombie/cropMutations.ts (plotsTouch)
   raid: { armyCap: ARMY_CAP, minArmy: MIN_ARMY, cooldownMs: RAID_COOLDOWN_MS, eliteBrainLuck: ELITE_BRAIN_LUCK, brainPityInvasions: BRAIN_PITY_INVASIONS, rareZombiePityWins: RAID_ZOMBIE_PITY_WINS },
   themes: { active: ACTIVE_THEMES, evergreen: EVERGREEN },

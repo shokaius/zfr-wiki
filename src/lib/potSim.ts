@@ -84,7 +84,9 @@ export function simulateCombine(pa: SimParent, pb: SimParent, level: number, gra
   if (b.isSpecial) return { ...blank, error: "A Special zombie can't go in slot 2 - put it in slot 1." };
   if (a.isSpecial && b.isSpecial) return { ...blank, error: "Two Special zombies can't be combined." };
 
-  const hasGrave = (color: "Blue" | "Red" | "Silver") => (color === "Blue" ? graves.blue : color === "Red" ? graves.red : false);
+  const hasGrave = (
+  color: "Blue" | "Red" | "Silver" | "Obsidian"
+) => (color === "Blue" ? graves.blue : color === "Red" ? graves.red : false);
   // Two deterministic passes: force the special roll to miss, then to hit.
   const missKey = selectCombineSpecies(a, b, level, () => 1, hasGrave);
   const hitKey = selectCombineSpecies(a, b, level, () => 0, hasGrave);
